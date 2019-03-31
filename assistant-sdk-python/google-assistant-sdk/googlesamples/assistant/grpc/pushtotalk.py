@@ -463,11 +463,11 @@ def main(api_endpoint, credentials, project_id,
         else:
             logging.info('color is not blue')
 
-    @device_helpers.command('com.example.commands.MAIN')
+    @device_handler.command('com.example.commands.MAIN')
     def MAIN(someValue):
         logging.info('someValue is: %s' % someValue)
 
-    @device_helpers.command('com.example.commands.MyDevices')
+    @device_handler.command('com.example.commands.MyDevices')
     def myDevices(status, device):
         if device == "LED 1":
             logging.info('Turning %s %s' % (device, status))
