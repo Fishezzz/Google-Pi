@@ -513,7 +513,7 @@ def main(api_endpoint, credentials, project_id,
             GPIO.output(LED2, 0)
             time.sleep(delay)
 
-    @device_helpers.command('com.example.commands.LEDColor')
+    @device_handler.command('com.example.commands.LEDColor')
     def LEDColor(device, color):
         logging.info('Making %s %s' % (device, color.get('name')))
 
