@@ -472,22 +472,22 @@ def main(api_endpoint, credentials, project_id,
         if device == "LED 1":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED1, f(status))
-        elif device == "LED 2"
+        elif device == "LED 2":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED2, f(status))
-        elif device == "LED 3"
+        elif device == "LED 3":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED3, f(status))
-        elif device == "LED 4"
+        elif device == "LED 4":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED4, f(status))
-        elif device == "LED 5"
+        elif device == "LED 5":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED5, f(status))
-        elif device == "LED 6"
+        elif device == "LED 6":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED6, f(status))
-        elif device == "ALL_LEDS"
+        elif device == "ALL_LEDS":
             logging.info('Turning all leds %s' % status)
             GPIO.output(LED1, f(status))
             GPIO.output(LED2, f(status))
