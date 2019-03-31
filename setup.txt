@@ -1,0 +1,90 @@
+##########
+
+arecord -l
+aplay -l
+
+pcm.!default {
+  type asym
+  capture.pcm "mic"
+  playback.pcm "speaker"
+}
+pcm.mic {
+  type plug
+  slave {
+    pcm "hw:<card number>,<device number>"
+  }
+}
+pcm.speaker {
+  type plug
+  slave {
+    pcm "hw:<card number>,<device number>"
+  }
+}
+
+alsamixer
+speaker-test -t wav
+arecord --format=S16_LE --duration=5 --rate=16000 --file-type=raw out.raw
+aplay --format=S16_LE --rate=16000 out.raw
+
+##########
+
+https://console.actions.google.com/
+Add/import project
+
+Device registration
+
+'Google Assistant API' enablen
+
+configure OAuth-consent screen
+
+##########
+
+https://console.actions.google.com/
+register device
+
+client_secret.json downloaden en op pi zetten
+
+sudo apt install python3-dev python3-venv
+python3 -m venv env
+env/bin/python -m pip install --upgrade pip setuptools wheel
+source env/bin/activate
+
+sudo apt install portaudio19-dev libffi-dev libssl-dev
+
+python -m pip install --upgrade google-assistant-sdk[samples]
+
+python -m pip install --upgrade google-auth-oauthlib[tool]
+
+google-oauthlib-tool --scope https://www.googleapis.com/auth/assistant-sdk-prototype --save --headless --client-secrets client_secret.json
+
+googlesamples-assistant-pushtotalk --project-id <my-dev-project --device-model-id my-model
+googlesamples-assistant-hotword --project-id my-dev-project --device-model-id my-model
+
+##########
+
+OnOff trait toevoegen aan device
+
+git clone https://github.com/googlesamples/assistant-sdk-python
+pip install RPi.GPIO
+
+cd assistant-sdk-python/google-assistant-sdk/googlesamples/assistant/grpc
+nano pushtotalk.py
+
+import RPi.GPIO as GPIO
+
+device_handler = device_helpers.DeviceRequestHandler(device_id)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW)
+
+@device_handler.command('action.devices.commands.OnOff')
+def onoff(on):
+    if on:
+        logging.info('Turning device on')
+        GPIO.output(25, 1)
+    else:
+        logging.info('Turning device off')
+        GPIO.output(25, 0)
+
+python pushtotalk.py
+
+##########
