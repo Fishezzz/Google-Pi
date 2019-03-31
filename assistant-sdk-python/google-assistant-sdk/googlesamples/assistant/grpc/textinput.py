@@ -232,6 +232,11 @@ def main(api_endpoint, credentials,
 
     @device_handler.command('com.example.commands.MyDevices')
     def myDevices(status, device):
+        if status == "ON":
+            status = 1
+        else:
+            status = 0
+        
         if device == "LED 1":
             logging.info('Turning %s %s' % (device, status))
             GPIO.output(LED1, f(status))
