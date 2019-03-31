@@ -212,20 +212,6 @@ def main(api_endpoint, credentials,
             logging.info('Turning device off')
             GPIO.output(LED1, 0)
 
-    @device_handler.command('action.devices.commands.BrightnessAbsolute')
-    def brightnessCheck(brightness):
-        if brightness > 50:
-            logging.info('brightness > 50')
-        else:
-            logging.info('brightness <= 50')
-
-    @device_handler.command('action.devices.commands.ColorAbsolute')
-    def color(color):
-        if color.get('name') == "blue":
-            logging.info('color is blue')
-        else:
-            logging.info('color is not blue')
-
     @device_handler.command('com.example.commands.MAIN')
     def MAIN(someValue):
         logging.info('someValue is: %s' % someValue)
