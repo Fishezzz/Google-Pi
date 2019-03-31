@@ -47,6 +47,7 @@ env/lib/python3.5/site-packages/google_assistant_grpc-0.2.1-py2.7-nspkg.pth
 env/lib/python3.5/site-packages/google_assistant_library-0.1.0-py2.7-nspkg.pth
 env/lib/python3.5/site-packages/google_assistant_sdk-0.5.1-py2.7-nspkg.pth
 env/lib/python3.5/site-packages/google_auth-1.0.1-py2.7-nspkg.pth
+env/lib/python3.5/site-packages/google_auth_oauthlib-0.3.0.dist-info/
 env/lib/python3.5/site-packages/googleapis_common_protos-1.5.8-py3.4-nspkg.pth
 env/lib/python3.5/site-packages/ipaddress.py
 env/lib/python3.5/site-packages/protobuf-3.7.0-nspkg.pth
