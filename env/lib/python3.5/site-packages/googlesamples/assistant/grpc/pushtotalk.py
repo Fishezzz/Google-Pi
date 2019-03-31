@@ -22,10 +22,11 @@ LED4 = 13
 LED5 = 6
 LED6 = 5
 def f(x):
-    return = {
+    switcher = {
         'ON': 1,
         'OFF': 0
-    }[x]
+    }
+    return switcher.get(x, 0)
 
 import concurrent.futures
 import json
