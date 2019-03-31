@@ -37,7 +37,7 @@
                         "items": [
                             {
                                 "simpleResponse": {
-                                    "textToSpeech": "Hi, my name is not $SchemaOrg_Text:someValue, but what can I do for you?"
+                                    "textToSpeech": "Hi, my name is not $someValue, but what can I do for you?"
                                 }
                             },
                             {
@@ -67,17 +67,17 @@
                 "parameters": [
                     {
                         "name": "status",
-                        "type": "status"
+                        "type": "Status"
                     },
                     {
                         "name": "device",
-                        "type": "device"
+                        "type": "Device"
                     }
                 ],
                 "trigger": {
                     "queryPatterns": [
-                        "Turn $status:status $device:device",
-                        "Turn $device:device $status:status"
+                        "Turn $Status:status $Device:device",
+                        "Turn $Device:device $Status:status"
                     ]
                 }
             },
@@ -128,7 +128,8 @@
                 "trigger": {
                     "queryPatterns": [
                         "blink ($Speed:speed)? $SchemaOrg_Number:number times",
-                        "blink $SchemaOrg_Number:number times ($Speed:speed)?"
+                        "blink $SchemaOrg_Number:number times ($Speed:speed)?",
+                        "($Speed:speed)? blink $SchemaOrg_Number:number times"
                     ]
                 }
             },
@@ -138,7 +139,7 @@
                         "items": [
                             {
                                 "simpleResponse": {
-                                    "textToSpeech": "Blinking ($Speed:speed)? $number times"
+                                    "textToSpeech": "Blinking ($speed)? $number times"
                                 }
                             },
                             {
@@ -173,13 +174,12 @@
                     },
                     {
                         "name": "device",
-                        "type": "device"
+                        "type": "Device"
                     }
                 ],
                 "trigger": {
                     "queryPatterns": [
-                        "set $device:device on $SchemaOrg_Color:color"
-                        
+                        "make $Device:device $SchemaOrg_Color:color"
                     ]
                 }
             },
@@ -189,7 +189,7 @@
                         "items": [
                             {
                                 "simpleResponse": {
-                                    "textToSpeech": "The color is $color"
+                                    "textToSpeech": "The color of $device is now $color"
                                 }
                             },
                             {
@@ -236,7 +236,7 @@
             ]
         },
         {
-            "name": "$device",
+            "name": "$Device",
             "entities": [
                 {
                     "key":"LED 1",
@@ -261,17 +261,51 @@
                     ]
                 },
                 {
-                    "key":"LED3",
+                    "key":"LED 3",
                     "synonyms": [
                         "led 3",
                         "device 3",
                         "light 3",
                         "led three",
-                        "device three" 
+                        "device three",
+                        "light three"
                     ]
                 },
                 {
-                    "key":"ALL LEDS",
+                    "key":"LED 4",
+                    "synonyms": [
+                        "led 4",
+                        "device 4",
+                        "light 4",
+                        "led four",
+                        "device four",
+                        "light four"
+                    ]
+                },
+                {
+                    "key":"LED 5",
+                    "synonyms": [
+                        "led 5",
+                        "device 5",
+                        "light 5",
+                        "led five",
+                        "device five",
+                        "light five"
+                    ]
+                },
+                {
+                    "key":"LED 6",
+                    "synonyms": [
+                        "led 6",
+                        "device 6",
+                        "light 6",
+                        "led six",
+                        "device six",
+                        "light six"
+                    ]
+                },
+                {
+                    "key":"ALL_LEDS",
                     "synonyms": [
                         "all leds",
                         "all devices",
@@ -281,20 +315,22 @@
             ]
         },
         {
-            "name": "$status",
+            "name": "$Status",
             "entities": [
                 {
                     "key":"ON",
                     "synonyms": [
                         "on",
-                        "true"
+                        "true",
+                        "1"
                     ]
                 },
                 {
                     "key":"OFF",
                     "synonyms": [
                         "off",
-                        "false"
+                        "false",
+                        "0"
                     ]
                 }
                 

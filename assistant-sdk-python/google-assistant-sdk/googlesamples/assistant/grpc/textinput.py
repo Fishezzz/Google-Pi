@@ -15,6 +15,17 @@
 """Sample that implements a text client for the Google Assistant Service."""
 
 import RPi.GPIO as GPIO
+LED1 = 25
+LED2 = 26
+LED3 = 19
+LED4 = 13
+LED5 = 6
+LED6 = 5
+def f(x):
+    return = {
+        'ON': 1,
+        'OFF': 0
+    }[x]
 
 import os
 import logging
@@ -184,31 +195,21 @@ def main(api_endpoint, credentials,
     device_handler = device_helpers.DeviceRequestHandler(device_id)
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED1, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED2, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED3, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED4, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED5, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(LED6, GPIO.OUT, initial=GPIO.LOW)
 
     @device_handler.command('action.devices.commands.OnOff')
     def onoff(on):
         if on:
             logging.info('Turning device on')
-            GPIO.output(25, 1)
+            GPIO.output(LED1, 1)
         else:
             logging.info('Turning device off')
-            GPIO.output(25, 0)
-
-    @device_handler.command('com.example.commands.BlinkLight')
-    def blink(speed, number):
-        logging.info('Blinking device %s times.' % number)
-        delay = 1
-        if speed == "SLOWLY":
-            delay = 2
-        elif speed == "QUICKLY":
-            delay = 0.5
-        for i in range(int(number)):
-            logging.info('Device is blinking.')
-            GPIO.output(25, 1)
-            time.sleep(delay)
-            GPIO.output(25, 0)
-            time.sleep(1)
+            GPIO.output(LED1, 0)
 
     @device_handler.command('action.devices.commands.BrightnessAbsolute')
     def brightnessCheck(brightness):
@@ -223,6 +224,60 @@ def main(api_endpoint, credentials,
             logging.info('color is blue')
         else:
             logging.info('color is not blue')
+
+    @device_helpers.command('com.example.commands.MAIN')
+    def MAIN(someValue):
+        logging.info('someValue is: %s' % someValue)
+
+    @device_helpers.command('com.example.commands.MyDevices')
+    def myDevices(status, device):
+        if device == "LED 1":
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED1, f(status))
+        elif device == "LED 2"
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED2, f(status))
+        elif device == "LED 3"
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED3, f(status))
+        elif device == "LED 4"
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED4, f(status))
+        elif device == "LED 5"
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED5, f(status))
+        elif device == "LED 6"
+            logging.info('Turning %s %s' % (device, status))
+            GPIO.output(LED6, f(status))
+        elif device == "ALL_LEDS"
+            logging.info('Turning all leds %s' % status)
+            GPIO.output(LED1, f(status))
+            GPIO.output(LED2, f(status))
+            GPIO.output(LED3, f(status))
+            GPIO.output(LED4, f(status))
+            GPIO.output(LED5, f(status))
+            GPIO.output(LED6, f(status))
+        else:
+            logging.info('Something went wrong')
+
+    @device_handler.command('com.example.commands.BlinkLight')
+    def blink(speed, number):
+        logging.info('Blinking device %s times.' % number)
+        delay = 1
+        if speed == "SLOWLY":
+            delay = 2
+        elif speed == "QUICKLY":
+            delay = 0.5
+        for i in range(int(number)):
+            logging.info('Device is blinking.')
+            GPIO.output(LED2, 1)
+            time.sleep(delay)
+            GPIO.output(LED2, 0)
+            time.sleep(delay)
+
+    @device_helpers.command('com.example.commands.LEDColor')
+    def LEDColor(device, color):
+        logging.info('Making %s %s' % (device, color.get('name')))
 
     with SampleTextAssistant(lang, device_model_id, device_id, display,
                              grpc_channel, grpc_deadline) as assistant:
