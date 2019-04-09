@@ -46,6 +46,10 @@ app.intent('com.example.intents.LEDColor', conv => {
 	conv.data.someProperty = 'someValue';
 });
 
+app.fallback((conv) => {
+  conv.ask(`I couldn't understand. Can you say that again?`);
+});
+
 app.catch((conv, error) => {
 	console.error(error);
 	conv.ask('I encountered a glitch. Can you say that again?');
