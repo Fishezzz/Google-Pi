@@ -88,3 +88,7 @@ def onoff(on):
 python pushtotalk.py
 
 ##########
+
+08697b66-45ae-11e9-aca3-b827ebc587c1
+vivid-willow-233809-m.e.-google-pi
+vivid-willow-233809

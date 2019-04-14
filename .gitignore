@@ -1,5 +1,8 @@
 .git/
 creds.data
+client_secret.json
+package-lock.json
+token.json
 googlepi.jpg
 googlepiBanner.jpg
 googlepiLogo.jpg
@@ -132,5 +135,3 @@ env/lib/python3.5/site-packages/googlesamples/assistant/grpc/devicetool.py
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/pushtotalk_original.py
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/__pycache__/
 node_modules/
-client_secret.json
-package-lock.json
