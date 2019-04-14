@@ -1,8 +1,6 @@
 .git/
 creds.data
-client_secret.json
-package-lock.json
-token.json
+googlepi.code-workspace
 googlepi.jpg
 googlepiBanner.jpg
 googlepiLogo.jpg

@@ -15,12 +15,12 @@
 """Sample that implements a text client for the Google Assistant Service."""
 
 import RPi.GPIO as GPIO
-LED1 = 25
-LED2 = 26
-LED3 = 19
-LED4 = 13
-LED5 = 6
-LED6 = 5
+LED1 = 26
+LED2 = 19
+LED3 = 13
+LED4 = 6
+LED5 = 5
+LED6 = 0
 #def f(x):
 #    switcher = {
 #        'ON': 1,
