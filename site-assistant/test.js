@@ -3,9 +3,9 @@
 //#region INIT & CONFIG */
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 // var LED = new Gpio(25, 'out'); //use GPIO pin 4, and specify that it is output
-var LedR = new Gpio(5, 'out'); //use GPIO pin 4, and specify that it is output
+var LedR = new Gpio(13, 'out'); //use GPIO pin 4, and specify that it is output
 var LedG = new Gpio(6, 'out'); //use GPIO pin 4, and specify that it is output
-var LedB = new Gpio(13, 'out'); //use GPIO pin 4, and specify that it is output
+var LedB = new Gpio(5, 'out'); //use GPIO pin 4, and specify that it is output
 var Led1 = new Gpio(26, 'out');
 var Led2 = new Gpio(19, 'out');
 // var Led3 = new Gpio(13, 'out');
