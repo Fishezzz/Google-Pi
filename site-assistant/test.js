@@ -69,11 +69,11 @@ const startConversation = (conversation) => {
     //#region CONVERSATION */
     // setup the conversation
     conversation
-    // //#region  SPEECH ONLY */
-    // .on('audio-data', (data) => {
-    //     // send the audio buffer to the speaker
-    //     speakerHelper.update(data);
-    // })
+    .on('audio-data', (data) => {
+        // send the audio buffer to the speaker
+        speakerHelper.update(data);
+    })
+    //#region  SPEECH ONLY */
     // .on('end-of-utterance', () => {
     //     // done speaking, close the mic
     //     record.stop();
@@ -218,37 +218,37 @@ const startConversation = (conversation) => {
     })
     //#endregion CONVERSATION */
 
-//     //#region  MIC */
-//     // pass the mic audio to the assistant
-//     const mic = record.start({
-//         threshold: 0,
-//         recordProgram: 'arecord',
-//         device: 'plughw:1,0'
-//     });
-//     mic.on('data', (data) => {
-//         conversation.write(data)
-//     });
-//     //#endregion MIC */
+    //#region  MIC */
+    // pass the mic audio to the assistant
+    const mic = record.start({
+        threshold: 0,
+        recordProgram: 'arecord',
+        device: 'plughw:1,0'
+    });
+    mic.on('data', (data) => {
+        conversation.write(data)
+    });
+    //#endregion MIC */
 
-//     //#region  SPEAKER */
-//     // setup the speaker
-//     const speaker = new Speaker({
-//         channels: 1,
-//         sampleRate: config.conversation.audio.sampleRateOut
-//     });
-//     speakerHelper.init(speaker);
-//     speaker
-//     .on('open', () => {
-//         console.log('Assistant Speaking');
-//         speakerHelper.open();
-//     })
-//     .on('close', () => {
-//         console.log('Assistant Finished Speaking');
-//         if (openMicAgain) {
-//             assistant.start(config.conversation);
-//         }
-//     });
-//     //#endregion SPEAKER */
+    //#region  SPEAKER */
+    // setup the speaker
+    const speaker = new Speaker({
+        channels: 1,
+        sampleRate: config.conversation.audio.sampleRateOut
+    });
+    speakerHelper.init(speaker);
+    speaker
+    .on('open', () => {
+        console.log('Assistant Speaking');
+        speakerHelper.open();
+    })
+    .on('close', () => {
+        console.log('Assistant Finished Speaking');
+        if (openMicAgain) {
+            assistant.start(config.conversation);
+        }
+    });
+    //#endregion SPEAKER */
 };
 //#endregion START CONVERSATION */
 
