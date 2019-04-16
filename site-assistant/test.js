@@ -54,7 +54,10 @@ function blinkLED(count) {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
-    if (!--count) clearInterval(blinkLED);
+    count--;
+    if (count==0) {
+        clearInterval(blinkLED);
+    }
 };
 //#endregion FUNCTIONS */
 
