@@ -4,7 +4,7 @@ const record = require('node-record-lpcm16');
 const Speaker = require('speaker');
 const path = require('path');
 const GoogleAssistant = require('google-assistant');
-const speakerHelper = require('./examples/speaker-helper');
+const speakerHelper = require('./speaker-helper');
 
 const config = {
     auth: {
