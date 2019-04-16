@@ -96,9 +96,7 @@ const startConversation = (conversation) => {
         var params = action.inputs[0].payload.commands[0].execution[0].params;
         console.log(command);
         console.log(params);
-        console.log('1'+startConversation);
-        console.log('2'+startConversation.arguments);
-        console.log('2'+startConversation.arguments[0]);
+        console.log('2'+startConversation.conversation);
         switch (command) {
             //#region com.example.commands.MyDevices */
             case 'com.example.commands.MyDevices':
