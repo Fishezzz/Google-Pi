@@ -97,8 +97,8 @@ const startConversation = (conversation) => {
         console.log(command);
         console.log(params);
         switch (command) {
-            //#region action.devices.commands.OnOff */
-            case 'action.devices.commands.OnOff':
+            //#region com.example.commands.MyDevices */
+            case 'com.example.commands.MyDevices':
                 console.log('reached actions.device.commands.OnOff');
                 switch (params.device) {
                     case 'LED 1':
