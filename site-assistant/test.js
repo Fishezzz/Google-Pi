@@ -46,7 +46,7 @@ const config = {
 
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
-const startConversation = (conversation, lol) => {
+const startConversation = (conversation) => {
     console.log('Say something!');
     let openMicAgain = false; // optie 1 spraak
 
