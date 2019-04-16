@@ -198,7 +198,7 @@ const startConversation = (conversation, lol) => {
     // setup the speaker
     const speaker = new Speaker({
         channels: 1,
-        sampleRate= config.conversation.audio.sampleRateOut
+        sampleRate: config.conversation.audio.sampleRateOut
     });
     speakerHelper.init(speaker);
     speaker
