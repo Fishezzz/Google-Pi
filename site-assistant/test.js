@@ -47,14 +47,14 @@ const config = {
 
 //#region FUNCTIONS */
 function blinkLED() {
-    if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
-        LED.writeSync(1);
+    if (Led2.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led2.writeSync(1);
         console.log('Turning on...');
     } else {
-        LED.writeSync(0);
+        Led2.writeSync(0);
         console.log('Turning off...');
     }
-
+    Led2.unexport();
     if (!--conversation.params.number) clearInterval(blinkLED);
 };
 //#endregion FUNCTIONS */
@@ -100,8 +100,8 @@ const startConversation = (conversation) => {
         switch (command) {
             //#region action.devices.commands.OnOff */
             case 'action.devices.commands.OnOff':
-            console.log('reached actions.device.commands.OnOff');
-            switch (params.device) {
+                console.log('reached actions.device.commands.OnOff');
+                switch (params.device) {
                     case 'LED 1':
                         Led1.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
@@ -135,6 +135,12 @@ const startConversation = (conversation) => {
                         Led6.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                 }
+                Led1.unexport();
+                Led2.unexport();
+                LedR.unexport();
+                LedG.unexport();
+                LedB.unexport();
+                Led6.unexport();
             break;
             //#endregion action.devices.commands.OnOff */
             //#region com.example.commands.LEDColor */
@@ -146,7 +152,6 @@ const startConversation = (conversation) => {
                             LedR.writeSync(0);
                             LedG.writeSync(0);
                             LedB.writeSync(1);
-                            console.log('test');
                         break;
                         case 'red':
                             LedR.writeSync(1);
@@ -179,6 +184,9 @@ const startConversation = (conversation) => {
                             LedB.writeSync(0);
                         break;
                     }
+                    LedR.unexport();
+                    LedG.unexport();
+                    LedB.unexport();
                 }
                 else console.log('Wrong device.');
             break;
