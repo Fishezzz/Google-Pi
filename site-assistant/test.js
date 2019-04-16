@@ -185,12 +185,12 @@ const startConversation = (conversation) => {
             case 'com.example.commands.BlinkLight':
                 console.log('reached com.example.commands.BlinkLight');
                 if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED(number*2), 1000);
+                    blinkInterval = setInterval(blinkLED(params.number*2), 1000);
                 }
                 else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED(number*2), 250);
+                    blinkInterval = setInterval(blinkLED(params.number*2), 250);
                 } else {
-                    blinkInterval = setInterval(blinkLED(number*2), 500);
+                    blinkInterval = setInterval(blinkLED(params.number*2), 500);
                 }
             break;
             //#endregion com.example.commands.BlinkLight */
