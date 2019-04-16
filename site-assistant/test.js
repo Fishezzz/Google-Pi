@@ -187,12 +187,12 @@ const startConversation = (conversation) => {
                 if (params.speed == 'SLOWLY') {
                     blinkInterval = setInterval(blinkLED, 1000);
                 }
-                else if (params.speed == 'NORMALLY') {
-                    blinkInterval = setInterval(blinkLED, 500);
-                }
                 else if (params.speed == 'QUICKLY') {
                     blinkInterval = setInterval(blinkLED, 250);
+                } else  {
+                    blinkInterval = setInterval(blinkLED, 500);
                 }
+
             break;
             //#endregion com.example.commands.BlinkLight */
         }
