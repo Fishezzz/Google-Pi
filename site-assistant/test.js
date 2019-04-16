@@ -209,7 +209,8 @@ const startConversation = (conversation) => {
             promptForInput(); // optie 2 tekst
         } else {
             console.log('Conversation Complete');
-            conversation.end(); // optie 2 tekst
+            promptForInput();
+            // conversation.end(); // optie 2 tekst
         }
     })
     .on('error', (error) =>  {
