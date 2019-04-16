@@ -54,7 +54,6 @@ function blinkLED() {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
-    Led2.unexport();
     if (!--conversation.params.number) clearInterval(blinkLED);
 };
 //#endregion FUNCTIONS */
@@ -135,12 +134,6 @@ const startConversation = (conversation) => {
                         Led6.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                 }
-                Led1.unexport();
-                Led2.unexport();
-                LedR.unexport();
-                LedG.unexport();
-                LedB.unexport();
-                Led6.unexport();
             break;
             //#endregion action.devices.commands.OnOff */
             //#region com.example.commands.LEDColor */
@@ -184,9 +177,6 @@ const startConversation = (conversation) => {
                             LedB.writeSync(0);
                         break;
                     }
-                    LedR.unexport();
-                    LedG.unexport();
-                    LedB.unexport();
                 }
                 else console.log('Wrong device.');
             break;
