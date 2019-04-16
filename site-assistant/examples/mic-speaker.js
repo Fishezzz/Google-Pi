@@ -8,8 +8,8 @@ const speakerHelper = require('./examples/speaker-helper');
 
 const config = {
     auth: {
-        keyFilePath: path.resolve(__dirname, '../client_secret.json'),
-        savedTokensPath: path.resolve(__dirname, './tokens.json'), // where you want the tokens to be saved
+        keyFilePath: path.resolve(__dirname, '../../client_secret.json'),
+        savedTokensPath: path.resolve(__dirname, '../tokens.json'), // where you want the tokens to be saved
     },
     conversation: {
         audio: {
