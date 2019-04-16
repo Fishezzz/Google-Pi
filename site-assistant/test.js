@@ -46,7 +46,7 @@ const config = {
 
 
 //#region FUNCTIONS */
-function blinkLED() {
+function blinkLED(count) {
     if (Led2.readSync() === 0) { //check the pin state, if the state is 0 (or off)
         Led2.writeSync(1);
         console.log('Turning on...');
@@ -54,11 +54,8 @@ function blinkLED() {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
+    if (!--count) clearInterval(blinkLED);
 };
-
-function endBlink() {
-    clearInterval(blinkLED);
-}
 //#endregion FUNCTIONS */
 
 
@@ -187,15 +184,14 @@ const startConversation = (conversation) => {
             //#region com.example.commands.BlinkLight */
             case 'com.example.commands.BlinkLight':
                 console.log('reached com.example.commands.BlinkLight');
-                var speed = 500;
                 if (params.speed == 'SLOWLY') {
-                    speed *= 2;
+                    blinkInterval = setInterval(blinkLED(number*2), 1000);
                 }
                 else if (params.speed == 'QUICKLY') {
-                    speed /= 2;
+                    blinkInterval = setInterval(blinkLED(number*2), 250);
+                } else {
+                    blinkInterval = setInterval(blinkLED(number*2), 500);
                 }
-                blinkInterval = setInterval(blinkLED, speed);
-                setTimeout(endBlink, params.number * speed + 10);
             break;
             //#endregion com.example.commands.BlinkLight */
         }
