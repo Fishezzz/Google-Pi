@@ -54,7 +54,7 @@ function blinkLED() {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
-    if (!--conversation.params.number) clearInterval(blinkLED);
+    if (!--startConversation.arguments[0].conversation.params.number) clearInterval(blinkLED);
 };
 //#endregion FUNCTIONS */
 
@@ -96,6 +96,9 @@ const startConversation = (conversation) => {
         var params = action.inputs[0].payload.commands[0].execution[0].params;
         console.log(command);
         console.log(params);
+        console.log('1'+startConversation);
+        console.log('2'+startConversation.arguments);
+        console.log('2'+startConversation.arguments[0]);
         switch (command) {
             //#region com.example.commands.MyDevices */
             case 'com.example.commands.MyDevices':
