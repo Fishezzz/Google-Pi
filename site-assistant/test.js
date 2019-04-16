@@ -187,13 +187,14 @@ const startConversation = (conversation) => {
             //#region com.example.commands.BlinkLight */
             case 'com.example.commands.BlinkLight':
                 console.log('reached com.example.commands.BlinkLight');
+                var blinkCount = params.number*2;
                 if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED(params.number*2), 1000);
+                    blinkInterval = setInterval(blinkLED(blinkCount), 1000);
                 }
                 else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED(params.number*2), 250);
+                    blinkInterval = setInterval(blinkLED(blinkCount), 250);
                 } else {
-                    blinkInterval = setInterval(blinkLED(params.number*2), 500);
+                    blinkInterval = setInterval(blinkLED(blinkCount), 500);
                 }
             break;
             //#endregion com.example.commands.BlinkLight */
