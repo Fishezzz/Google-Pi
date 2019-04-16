@@ -20,7 +20,7 @@ const config = {
         keyFilePath: path.resolve(__dirname, '../client_secret.json'),
         // where you want the tokens to be saved
         // will create the directory if not already there
-        savedTokensPath: path.resolve(__dirname, './token.json'),
+        savedTokensPath: path.resolve(__dirname, './tokens.json'),
     },
     // this param is optional, but all options will be shown
     conversation: {

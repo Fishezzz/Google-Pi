@@ -48,7 +48,7 @@ const config = {
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
     console.log('Say something!');
-    let openMicAgain = false; // optie 1 spraak
+    // let openMicAgain = false; // optie 1 spraak
 
     //#region CONVERSATION */
     // setup the conversation
@@ -168,7 +168,7 @@ const startConversation = (conversation) => {
             console.log('Conversation Ended Error:', error);
         }
         else if (continueConversation) {
-            openMicAgain = true; // optie 1 spraak
+            // openMicAgain = true; // optie 1 spraak
             promptForInput(); // optie 2 tekst
         }
         else {
@@ -239,11 +239,11 @@ const promptForInput = () => {
 const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', () => {
-    assistant.start(config.conversation); // optie 1 spraak
+    // assistant.start(config.conversation); // optie 1 spraak
     promptForInput; // optie 2 tekst
 })
 .on('started', () => { // optie 1 spraak
-    startConversation; // optie 1 spraak
+    // startConversation; // optie 1 spraak
 })
 .on('error', (error) => {
     console.log('Assistant Error:', error);
