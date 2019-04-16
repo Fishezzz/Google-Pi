@@ -12,7 +12,7 @@ var Led2 = new Gpio(19, 'out');
 // var Led4 = new Gpio(6, 'out');
 // var Led5 = new Gpio(5, 'out');
 var Led6 = new Gpio(0, 'out');
-//var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
+var blinkInterval;
 
 const express = require('express');
 const PORT = 3000;
@@ -43,6 +43,22 @@ const config = {
     }
 };
 //#endregion INIT & CONFIG */
+
+
+//#region FUNCTIONS */
+function blinkLED() {
+    if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        LED.writeSync(1);
+        console.log('Turning on...');
+    } else {
+        LED.writeSync(0);
+        console.log('Turning off...');
+    }
+
+    if (!--conversation.params.number) clearInterval(blinkLED);
+};
+//#endregion FUNCTIONS */
+
 
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
@@ -82,8 +98,10 @@ const startConversation = (conversation) => {
         console.log(command);
         console.log(params);
         switch (command) {
+            //#region action.devices.commands.OnOff */
             case 'action.devices.commands.OnOff':
-                switch (params.device) {
+            console.log('reached actions.device.commands.OnOff');
+            switch (params.device) {
                     case 'LED 1':
                         Led1.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
@@ -118,8 +136,11 @@ const startConversation = (conversation) => {
                     break;
                 }
             break;
+            //#endregion action.devices.commands.OnOff */
+            //#region com.example.commands.LEDColor */
             case 'com.example.commands.LEDColor':
-                if (params.device == 'RGD LED') {
+            console.log('reached com.example.commands.LEDColor');
+            if (params.device == 'RGB LED') {
                     switch (params.color) {
                         case 'blue':
                             LedR.writeSync(0);
@@ -160,6 +181,21 @@ const startConversation = (conversation) => {
                 }
                 else console.log('Wrong device.');
             break;
+            //#endregion com.example.commands.LEDColor */
+            //#region com.example.commands.BlinkLight */
+            case 'com.example.commands.BlinkLight':
+                console.log('reached com.example.commands.BlinkLight');
+                if (params.speed == 'SLOWLY') {
+                    blinkInterval = setInterval(blinkLED, 1000);
+                }
+                else if (params.speed == 'NORMALLY') {
+                    blinkInterval = setInterval(blinkLED, 500);
+                }
+                else if (params.speed == 'QUICKLY') {
+                    blinkInterval = setInterval(blinkLED, 250);
+                }
+            break;
+            //#endregion com.example.commands.BlinkLight */
         }
     })
     .on('ended', (error, continueConversation) => {
@@ -170,8 +206,7 @@ const startConversation = (conversation) => {
         else if (continueConversation) {
             openMicAgain = true; // optie 1 spraak
             // promptForInput(); // optie 2 tekst
-        }
-        else {
+        } else {
             console.log('Conversation Complete');
             // conversation.end(); // optie 2 tekst
         }
@@ -249,3 +284,26 @@ assistant
     console.log('Assistant Error:', error);
 })
 //#endregion ASSISTANT */
+
+/*
+app.get('/',(req, res) =>
+    res.send(`Hello world!`)
+);
+
+app.post('/NewItem',(req, res) =>
+    res.send(`a post request with / route on port ${PORT}`)
+);
+
+app.put('/Item',(req, res) =>
+    res.send(`a put request with / route on port ${PORT}`)
+);
+
+app.delete('/Item',(req, res) =>
+    res.send(`a delete request with / route on port ${PORT}`)
+);
+
+app.listen(PORT,()=>{
+    console.log(`your server is running on port ${PORT}`);
+    console.log(data);
+});
+*/
