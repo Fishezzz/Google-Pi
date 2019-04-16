@@ -56,7 +56,7 @@ function blinkLED(count) {
     }
     count--;
     if (count==0) {
-        clearInterval(blinkLED);
+        clearInterval(blinkInterval);
     }
 };
 //#endregion FUNCTIONS */
