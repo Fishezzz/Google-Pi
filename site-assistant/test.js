@@ -54,8 +54,11 @@ function blinkLED() {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
-    if (!--startConversation.arguments[0].conversation.params.number) clearInterval(blinkLED);
 };
+
+function endBlink() {
+    clearInterval(blinkLED);
+}
 //#endregion FUNCTIONS */
 
 
@@ -96,7 +99,6 @@ const startConversation = (conversation) => {
         var params = action.inputs[0].payload.commands[0].execution[0].params;
         console.log(command);
         console.log(params);
-        console.log('2'+startConversation.conversation);
         switch (command) {
             //#region com.example.commands.MyDevices */
             case 'com.example.commands.MyDevices':
@@ -185,15 +187,15 @@ const startConversation = (conversation) => {
             //#region com.example.commands.BlinkLight */
             case 'com.example.commands.BlinkLight':
                 console.log('reached com.example.commands.BlinkLight');
+                var speed = 500;
                 if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED, 1000);
+                    speed *= 2;
                 }
                 else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED, 250);
-                } else  {
-                    blinkInterval = setInterval(blinkLED, 500);
+                    speed /= 2;
                 }
-
+                blinkInterval = setInterval(blinkLED, speed);
+                setTimeout(endBlink, params.number * speed + 10);
             break;
             //#endregion com.example.commands.BlinkLight */
         }
