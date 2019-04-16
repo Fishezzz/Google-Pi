@@ -276,10 +276,10 @@ const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', () => {
     // assistant.start(config.conversation); // optie 1 spraak
-    promptForInput; // optie 2 tekst
+    promptForInput // optie 2 tekst
 })
 // .on('started', () => { // optie 1 spraak
-//     startConversation; // optie 1 spraak
+//     startConversation // optie 1 spraak
 // })
 .on('error', (error) => {
     console.log('Assistant Error:', error);
