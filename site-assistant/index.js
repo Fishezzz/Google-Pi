@@ -1,5 +1,4 @@
 
-//import data from './data/data.json';
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 var LED = new Gpio(25, 'out'); //use GPIO pin 4, and specify that it is output
 var LedR = new Gpio(5, 'out'); //use GPIO pin 4, and specify that it is output
@@ -18,10 +17,10 @@ const speakerHelper = require('./examples/speaker-helper');
 const readline = require('readline');
 const config = {
     auth: {
-        keyFilePath: path.resolve(__dirname, '/home/pi/Downloads/client_secret_77242431490-ioc2e07e06825hl7samhc1u27vpsitnf.apps.googleusercontent.com.json'),
+        keyFilePath: path.resolve(__dirname, '../client_secret.json'),
         // where you want the tokens to be saved
         // will create the directory if not already there
-        savedTokensPath: path.resolve(__dirname, '/home/pi/express/express-app/token.json'),
+        savedTokensPath: path.resolve(__dirname, './token.json'),
     },
     // this param is optional, but all options will be shown
     conversation: {
@@ -35,7 +34,6 @@ const config = {
     },
 };
 
-const assistant = new GoogleAssistant(config.auth);
 
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
@@ -45,19 +43,19 @@ const startConversation = (conversation) => {
     // let openMicAgain = false;
 
     conversation
-    // send the audio buffer to the speaker
+    //// send the audio buffer to the speaker
     .on('audio-data', (data) => {
         speakerHelper.update(data);
     })
-    // done speaking, close the mic
+    //// done speaking, close the mic
     //.on('end-of-utterance', () => record.stop())
-    // just to spit out to the console what was said (as we say it)
+    //// just to spit out to the console what was said (as we say it)
     //.on('transcription', data => console.log('Transcription:', data.transcription, ' --- Done:', data.done))
-    // what the assistant said back
+    //// what the assistant said back
     .on('response', text => console.log('Assistant Text Response:', text))
-    // if we've requested a volume level change, get the percentage of the new level
+    //// if we've requested a volume level change, get the percentage of the new level
     .on('volume-percent', percent => console.log('New Volume Percent:', percent))
-    // the device needs to complete an action
+    //// the device needs to complete an action
     .on('device-action', action => {
         console.log(action.inputs[0].payload.commands[0].execution[0].command);
         console.log(action.inputs[0].payload.commands[0].execution[0].params);
@@ -106,7 +104,7 @@ const startConversation = (conversation) => {
             else console.log("fout device")
         }
     })
-    // once the conversation is ended, see if we need to follow up
+    //// once the conversation is ended, see if we need to follow up
     .on('ended', (error, continueConversation) => {
         if (error) console.log('Conversation Ended Error:', error);
         else if (continueConversation) { promptForInput(); }
@@ -116,7 +114,7 @@ const startConversation = (conversation) => {
             //conversation.end();
         }
     })
-    // catch any errors
+    //// catch any errors
     .on('error', (error) => {
         console.log('Conversation Error:', error);
     });
@@ -158,7 +156,9 @@ const promptForInput = () => {
     });
 };
 
+
 // setup the assistant
+const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', promptForInput)
 //.on('started', startConversation)
@@ -166,9 +166,10 @@ assistant
     console.log('Assistant Error:', error);
 });
 
+
 /*
 app.get('/',(req, res) =>
-    res.json(data)
+    res.send(`Hello world!`)
 );
 
 app.post('/NewItem',(req, res) =>

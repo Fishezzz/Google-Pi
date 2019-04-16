@@ -239,7 +239,7 @@
             "name": "$Device",
             "entities": [
                 {
-                    "key":"LED 1",
+                    "key": "LED 1",
                     "synonyms": [
                         "led 1",
                         "device 1",
@@ -250,7 +250,7 @@
                     ]
                 },
                 {
-                    "key":"LED 2",
+                    "key": "LED 2",
                     "synonyms": [
                         "led 2",
                         "device 2",
@@ -261,7 +261,7 @@
                     ]
                 },
                 {
-                    "key":"LED 3",
+                    "key": "LED 3",
                     "synonyms": [
                         "led 3",
                         "device 3",
@@ -272,7 +272,7 @@
                     ]
                 },
                 {
-                    "key":"LED 4",
+                    "key": "LED 4",
                     "synonyms": [
                         "led 4",
                         "device 4",
@@ -283,7 +283,7 @@
                     ]
                 },
                 {
-                    "key":"LED 5",
+                    "key": "LED 5",
                     "synonyms": [
                         "led 5",
                         "device 5",
@@ -294,7 +294,7 @@
                     ]
                 },
                 {
-                    "key":"LED 6",
+                    "key": "LED 6",
                     "synonyms": [
                         "led 6",
                         "device 6",
@@ -305,7 +305,15 @@
                     ]
                 },
                 {
-                    "key":"ALL_LEDS",
+                    "key": "RGD LED",
+                    "synonyms": [
+                        "rgb led",
+                        "rgb light",
+                        "rgb device"
+                    ]
+                },
+                {
+                    "key": "ALL LEDS",
                     "synonyms": [
                         "all leds",
                         "all devices",
@@ -318,7 +326,7 @@
             "name": "$Status",
             "entities": [
                 {
-                    "key":"ON",
+                    "key": "ON",
                     "synonyms": [
                         "on",
                         "true",
@@ -326,7 +334,7 @@
                     ]
                 },
                 {
-                    "key":"OFF",
+                    "key": "OFF",
                     "synonyms": [
                         "off",
                         "false",
