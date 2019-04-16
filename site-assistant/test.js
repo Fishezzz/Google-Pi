@@ -249,8 +249,8 @@ const startConversation = (conversation) => {
 //         }
 //     });
 //     //#endregion SPEAKER */
-// };
-// //#endregion START CONVERSATION */
+};
+//#endregion START CONVERSATION */
 
 //#region TEXT INPUT */
 const promptForInput = () => {
@@ -285,26 +285,3 @@ assistant
     console.log('Assistant Error:', error);
 })
 //#endregion ASSISTANT */
-
-/*
-app.get('/',(req, res) =>
-    res.send(`Hello world!`)
-);
-
-app.post('/NewItem',(req, res) =>
-    res.send(`a post request with / route on port ${PORT}`)
-);
-
-app.put('/Item',(req, res) =>
-    res.send(`a put request with / route on port ${PORT}`)
-);
-
-app.delete('/Item',(req, res) =>
-    res.send(`a delete request with / route on port ${PORT}`)
-);
-
-app.listen(PORT,()=>{
-    console.log(`your server is running on port ${PORT}`);
-    console.log(data);
-});
-*/
