@@ -244,9 +244,9 @@ const startConversation = (conversation) => {
     })
     .on('close', () => {
         console.log('Assistant Finished Speaking');
-        if (openMicAgain) {
-            assistant.start(config.conversation);
-        }
+        // if (openMicAgain) {
+        //     assistant.start(config.conversation); // optie 1 spraak
+        // }
     });
     //#endregion SPEAKER */
 };
@@ -274,13 +274,11 @@ const promptForInput = () => {
 // setup the assistant
 const assistant = new GoogleAssistant(config.auth);
 assistant
-.on('ready', () => {
-    // assistant.start(config.conversation); // optie 1 spraak
-    promptForInput // optie 2 tekst
-})
-// .on('started', () => { // optie 1 spraak
-//     startConversation // optie 1 spraak
+.on('ready', promptForInput) // optie 2 tekst
+// .on('ready', () => {
+//     assistant.start(config.conversation); // optie 1 spraak
 // })
+// .on('started', startConversation) // optie 1 spraak
 .on('error', (error) => {
     console.log('Assistant Error:', error);
 })
