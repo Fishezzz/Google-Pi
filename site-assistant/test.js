@@ -13,6 +13,7 @@ var Led2 = new Gpio(19, 'out');
 // var Led5 = new Gpio(5, 'out');
 var Led6 = new Gpio(0, 'out');
 var blinkInterval;
+var blinkCount = 0;
 
 const express = require('express');
 const PORT = 3000;
@@ -46,7 +47,7 @@ const config = {
 
 
 //#region FUNCTIONS */
-function blinkLED(count) {
+function blinkLED() {
     if (Led2.readSync() === 0) { //check the pin state, if the state is 0 (or off)
         Led2.writeSync(1);
         console.log('Turning on...');
@@ -54,8 +55,8 @@ function blinkLED(count) {
         Led2.writeSync(0);
         console.log('Turning off...');
     }
-    count--;
-    if (count==0) {
+    blinkCount--;
+    if (blinkCount==0) {
         clearInterval(blinkInterval);
     }
 };
@@ -187,14 +188,14 @@ const startConversation = (conversation) => {
             //#region com.example.commands.BlinkLight */
             case 'com.example.commands.BlinkLight':
                 console.log('reached com.example.commands.BlinkLight');
-                var blinkCount = params.number*2;
+                blinkCount = params.number*2;
                 if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED(blinkCount), 1000);
+                    blinkInterval = setInterval(blinkLED, 1000);
                 }
                 else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED(blinkCount), 250);
+                    blinkInterval = setInterval(blinkLED, 250);
                 } else {
-                    blinkInterval = setInterval(blinkLED(blinkCount), 500);
+                    blinkInterval = setInterval(blinkLED, 500);
                 }
             break;
             //#endregion com.example.commands.BlinkLight */
