@@ -139,13 +139,14 @@ const startConversation = (conversation) => {
             //#endregion action.devices.commands.OnOff */
             //#region com.example.commands.LEDColor */
             case 'com.example.commands.LEDColor':
-            console.log('reached com.example.commands.LEDColor');
-            if (params.device == 'RGB LED') {
+                console.log('reached com.example.commands.LEDColor');
+                if (params.device == 'RGB LED') {
                     switch (params.color) {
                         case 'blue':
                             LedR.writeSync(0);
                             LedG.writeSync(0);
                             LedB.writeSync(1);
+                            console.log('test');
                         break;
                         case 'red':
                             LedR.writeSync(1);
