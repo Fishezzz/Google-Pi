@@ -1,4 +1,3 @@
-'use strict';
 //#region INIT & CONFIG */
 var IsSpeech = false;
 var openMicAgain = false;

@@ -1,5 +1,3 @@
-'use strict';   
-import { hostname } from 'os';
 var Gpio = require('onoff').Gpio;
 
 var LED = new Gpio(25, 'out');
@@ -10,6 +8,7 @@ var LedB = new Gpio(13, 'out');
 const express = require('express');
 const app = express();
 const port = 3000;
+const { hostname } = require('os');
 var server = app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
