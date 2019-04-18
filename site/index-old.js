@@ -1,4 +1,5 @@
 'use strict';   
+import { hostname } from 'os';
 var Gpio = require('onoff').Gpio;
 
 var LED = new Gpio(25, 'out');
