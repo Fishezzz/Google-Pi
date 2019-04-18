@@ -183,9 +183,10 @@ assistant
 
 app.get('/', function (req, res, next) {
     res.sendFile(__dirname + '/index.html');
+    console.log(__dirname);
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/CSS/')));
 
 io.on('connection', function (socket) {
     console.log('socket.io connected');
