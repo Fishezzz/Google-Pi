@@ -289,12 +289,12 @@ assistant
     if (IsSpeech) {
         assistant.start(config.conversation); // optie 1 spraak
     } else {
-        promptForInput // optie 2 tekst
+        promptForInput(); // optie 2 tekst
     }
 })
 .on('started', () => {
     if (IsSpeech) {
-        startConversation  // optie 1 spraak
+        startConversation();  // optie 1 spraak
     }
 })
 .on('error', (error) => {
