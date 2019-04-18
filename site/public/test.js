@@ -67,6 +67,7 @@ function blinkLED() {
 };
 //#endregion FUNCTIONS */
 
+const assistant = new GoogleAssistant(config.auth);
 
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
@@ -277,7 +278,6 @@ const promptForInput = (request) => {
 
 //#region ASSISTANT */
 // setup the assistant
-const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', () => {
     // // if (IsSpeech) {
