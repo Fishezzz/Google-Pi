@@ -80,189 +80,189 @@ const startConversation = (conversation) => {
     //#region CONVERSATION */
     // setup the conversation
     conversation
-    .on('audio-data', (data) => {
-        // send the audio buffer to the speaker
-        speakerHelper.update(data);
-    })
-    //#region  SPEECH ONLY */
-    .on('end-of-utterance', () => {
-        // done speaking, close the mic
-        record.stop();
-    })
-    .on('transcription', (data) => {
-        // just to spit out to the console what was said (as we say it)
-        console.log('Transcription:', data.transcription, ' --- Done:', data.done);
-    })
-    //#endregion SPEECH ONLY */
-    .on('response', (text) => {
-        // what the assistant said back
-        if (text == "") {text = "Sorry, I didn't get that. Can you say it again?";}
-        console.log('Assistant Text Response:', text);
-        io.emit('message', text);
-    })
-    .on('volume-percent', (percent) => {
-        // if we've requested a volume level change, get the percentage of the new level
-        console.log('New Volume Percent:', percent);
-    })
-    .on('device-action', (action) => {
-        // if you've set this device up to handle actions, you'll get that here
-        var command = action.inputs[0].payload.commands[0].execution[0].command;
-        var params = action.inputs[0].payload.commands[0].execution[0].params;
-        console.log(command);
-        console.log(params);
-        switch (command) {
-            //#region com.example.commands.MyDevices */
-            case 'com.example.commands.MyDevices':
-                console.log('reached actions.device.commands.OnOff');
-                switch (params.device) {
-                    case 'LED 1':
-                        Led1.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 2':
-                        Led2.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 3':
-                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 4':
-                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 5':
-                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 6':
-                        Led6.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'ALL LEDS':
-                        Led1.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led2.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led6.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                }
-            break;
-            //#endregion action.devices.commands.OnOff */
-            //#region com.example.commands.LEDColor */
-            case 'com.example.commands.LEDColor':
-                console.log('reached com.example.commands.LEDColor');
-                if (params.device == 'RGB LED') {
-                    switch (params.color) {
-                        case 'blue':
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(1);
+        .on('audio-data', (data) => {
+            // send the audio buffer to the speaker
+            speakerHelper.update(data);
+        })
+        //#region  SPEECH ONLY */
+        .on('end-of-utterance', () => {
+            // done speaking, close the mic
+            record.stop();
+        })
+        .on('transcription', (data) => {
+            // just to spit out to the console what was said (as we say it)
+            console.log('Transcription:', data.transcription, ' --- Done:', data.done);
+        })
+        //#endregion SPEECH ONLY */
+        .on('response', (text) => {
+            // what the assistant said back
+            if (text == "") {text = "Sorry, I didn't get that. Can you say it again?";}
+            console.log('Assistant Text Response:', text);
+            io.emit('message', text);
+        })
+        .on('volume-percent', (percent) => {
+            // if we've requested a volume level change, get the percentage of the new level
+            console.log('New Volume Percent:', percent);
+        })
+        .on('device-action', (action) => {
+            // if you've set this device up to handle actions, you'll get that here
+            var command = action.inputs[0].payload.commands[0].execution[0].command;
+            var params = action.inputs[0].payload.commands[0].execution[0].params;
+            console.log(command);
+            console.log(params);
+            switch (command) {
+                //#region com.example.commands.MyDevices */
+                case 'com.example.commands.MyDevices':
+                    console.log('reached actions.device.commands.OnOff');
+                    switch (params.device) {
+                        case 'LED 1':
+                            Led1.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        case 'red':
-                            Led3.writeSync(1);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
+                        case 'LED 2':
+                            Led2.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        case 'green':
-                            Led3.writeSync(0);
-                            Led4.writeSync(1);
-                            Led5.writeSync(0);
+                        case 'LED 3':
+                            Led3.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        case 'yellow':
-                            Led3.writeSync(1);
-                            Led4.writeSync(1);
-                            Led5.writeSync(0);
+                        case 'LED 4':
+                            Led4.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        case 'white':
-                            Led3.writeSync(1);
-                            Led4.writeSync(1);
-                            Led5.writeSync(1);
+                        case 'LED 5':
+                            Led5.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        case 'black':
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
+                        case 'LED 6':
+                            Led6.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
-                        default:
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
+                        case 'ALL LEDS':
+                            Led1.writeSync(params.status == 'ON' ? 1 : 0);
+                            Led2.writeSync(params.status == 'ON' ? 1 : 0);
+                            Led3.writeSync(params.status == 'ON' ? 1 : 0);
+                            Led4.writeSync(params.status == 'ON' ? 1 : 0);
+                            Led5.writeSync(params.status == 'ON' ? 1 : 0);
+                            Led6.writeSync(params.status == 'ON' ? 1 : 0);
                         break;
                     }
-                }
-                else console.log('Wrong device.');
-            break;
-            //#endregion com.example.commands.LEDColor */
-            //#region com.example.commands.BlinkLight */
-            case 'com.example.commands.BlinkLight':
-                console.log('reached com.example.commands.BlinkLight');
-                blinkCount = params.number*2;
-                if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED, 1000);
-                }
-                else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED, 250);
-                } else {
-                    blinkInterval = setInterval(blinkLED, 500);
-                }
-            break;
-            //#endregion com.example.commands.BlinkLight */
-        }
-    })
-    .on('ended', (error, continueConversation) => {
-        // once the conversation is ended, see if we need to follow up
-        if (error) {
-            console.log('Conversation Ended Error:', error);
-        }
-        else if (continueConversation) {
-            // // if (IsSpeech) {
-            // //     openMicAgain = true; // optie 1 spraak
-            // // } else {
-            // //     promptForInput(); // optie 2 tekst
-            // // }
-            openMicAgain = true;
-        } else {
-            console.log('Conversation Complete');
-            // // if (!IsSpeech) {
-            // //     promptForInput();
-            // //     // conversation.end(); // optie 2 tekst
-            // // }
-        }
-    })
-    .on('error', (error) =>  {
-        // catch any errors
-        console.log(config.conversation.textQuery);
-        console.log('Conversation Error:', error);
-    })
-    //#endregion CONVERSATION */
+                break;
+                //#endregion action.devices.commands.OnOff */
+                //#region com.example.commands.LEDColor */
+                case 'com.example.commands.LEDColor':
+                    console.log('reached com.example.commands.LEDColor');
+                    if (params.device == 'RGB LED') {
+                        switch (params.color) {
+                            case 'blue':
+                                Led3.writeSync(0);
+                                Led4.writeSync(0);
+                                Led5.writeSync(1);
+                            break;
+                            case 'red':
+                                Led3.writeSync(1);
+                                Led4.writeSync(0);
+                                Led5.writeSync(0);
+                            break;
+                            case 'green':
+                                Led3.writeSync(0);
+                                Led4.writeSync(1);
+                                Led5.writeSync(0);
+                            break;
+                            case 'yellow':
+                                Led3.writeSync(1);
+                                Led4.writeSync(1);
+                                Led5.writeSync(0);
+                            break;
+                            case 'white':
+                                Led3.writeSync(1);
+                                Led4.writeSync(1);
+                                Led5.writeSync(1);
+                            break;
+                            case 'black':
+                                Led3.writeSync(0);
+                                Led4.writeSync(0);
+                                Led5.writeSync(0);
+                            break;
+                            default:
+                                Led3.writeSync(0);
+                                Led4.writeSync(0);
+                                Led5.writeSync(0);
+                            break;
+                        }
+                    }
+                    else console.log('Wrong device.');
+                break;
+                //#endregion com.example.commands.LEDColor */
+                //#region com.example.commands.BlinkLight */
+                case 'com.example.commands.BlinkLight':
+                    console.log('reached com.example.commands.BlinkLight');
+                    blinkCount = params.number*2;
+                    if (params.speed == 'SLOWLY') {
+                        blinkInterval = setInterval(blinkLED, 1000);
+                    }
+                    else if (params.speed == 'QUICKLY') {
+                        blinkInterval = setInterval(blinkLED, 250);
+                    } else {
+                        blinkInterval = setInterval(blinkLED, 500);
+                    }
+                break;
+                //#endregion com.example.commands.BlinkLight */
+            }
+        })
+        .on('ended', (error, continueConversation) => {
+            // once the conversation is ended, see if we need to follow up
+            if (error) {
+                console.log('Conversation Ended Error:', error);
+            }
+            else if (continueConversation) {
+                // // if (IsSpeech) {
+                // //     openMicAgain = true; // optie 1 spraak
+                // // } else {
+                // //     promptForInput(); // optie 2 tekst
+                // // }
+                openMicAgain = true;
+            } else {
+                console.log('Conversation Complete');
+                // // if (!IsSpeech) {
+                // //     promptForInput();
+                // //     // conversation.end(); // optie 2 tekst
+                // // }
+            }
+        })
+        .on('error', (error) =>  {
+            // catch any errors
+            console.log(config.conversation.textQuery);
+            console.log('Conversation Error:', error);
+        })
+        //#endregion CONVERSATION */
 
-    //#region  MIC */
-    // pass the mic audio to the assistant
-    const mic = record.start({
-        threshold: 0.5,
-        silence: 1.0,
-        recordProgram: 'arecord',
-        device: 'plughw:1,0'
-    });
-    mic.on('data', (data) => {
-        conversation.write(data)
-    });
-    //#endregion MIC */
+        //#region  MIC */
+        // pass the mic audio to the assistant
+        const mic = record.start({
+            threshold: 0.5,
+            silence: 1.0,
+            recordProgram: 'arecord',
+            device: 'plughw:1,0'
+        });
+        mic.on('data', (data) => {
+            conversation.write(data)
+        });
+        //#endregion MIC */
 
-    //#region  SPEAKER */
-    // setup the speaker
-    const speaker = new Speaker({
-        channels: 1,
-        sampleRate: config.conversation.audio.sampleRateOut
-    });
-    speakerHelper.init(speaker);
-    speaker
-    .on('open', () => {
-        console.log('Assistant Speaking');
-        speakerHelper.open();
-    })
-    .on('close', () => {
-        console.log('Assistant Finished Speaking');
-        if (/* IsSpeech && */ openMicAgain) {
-            assistant.start(config.conversation); // optie 1 spraak
-        }
-    });
+        //#region  SPEAKER */
+        // setup the speaker
+        const speaker = new Speaker({
+            channels: 1,
+            sampleRate: config.conversation.audio.sampleRateOut
+        });
+        speakerHelper.init(speaker);
+        speaker
+        .on('open', () => {
+            console.log('Assistant Speaking');
+            speakerHelper.open();
+        })
+        .on('close', () => {
+            console.log('Assistant Finished Speaking');
+            if (/* IsSpeech && */ openMicAgain) {
+                assistant.start(config.conversation); // optie 1 spraak
+            }
+        });
     //#endregion SPEAKER */
 };
 //#endregion START CONVERSATION */
