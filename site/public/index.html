@@ -43,8 +43,15 @@
                                     <input type="text" placeholder="Enter your text" id="TextInput"
                                         class="form-control chat-input">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <button class="btn btn-primary btn-block" onclick="SendData()">Send</button>
+                                </div>
+                                <div class="col-1">
+                                    <!-- Rounded switch -->
+                                    <label class="switch">
+                                        <input type="checkbox" onchange="IsSpeech(this.checked)">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -56,21 +63,21 @@
         <script src="http://fishezzz:3000/socket.io/socket.io.js" type="text/javascript"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script>
-            // var myVar = setInterval(myTimer, 1000);
             var socket = io.connect();
             var msgText = "";
-            // function myTimer() {
-                socket.on('message', function (msg) {
-                    if (msgText != msg) {
-                        $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor").append($('<div>').addClass("speech").text(msg))));
-                        msgText = msg;
-                    }
-                });
-            // }
+            socket.on('message', function (msg) {
+                if (msgText != msg) {
+                    $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor").append($('<div>').addClass("speech").text(msg)))).scrollTop($('.list-unstyled').height());
+                    msgText = msg;
+                }
+            });
+            function IsSpeech(checked) {
+                socket.emit("IsSpeech", checked);
+            }
             function SendData() {
-                if (TextInput.value != "") {
+                if (TextInput.value != "" && !IsSpeech) {
                     socket.emit("textInput", TextInput.value);
-                    $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value))));
+                    $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value)))).scrollTop($('.list-unstyled').height());
                 }
                 TextInput.value = "";
             }

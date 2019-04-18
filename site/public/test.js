@@ -1,6 +1,4 @@
 //#region INIT & CONFIG */
-// // var IsSpeech = false;
-// // var openMicAgain = false;
 var Gpio = require('onoff').Gpio;
 
 var Led1 = new Gpio(26, 'out');
@@ -11,6 +9,8 @@ var Led5 = new Gpio(5, 'out');
 var Led6 = new Gpio(0, 'out');
 var blinkInterval;
 var blinkCount = 0;
+var openMicAgain = false;
+var IsSpeech;
 
 const express = require('express');
 const app = express();
@@ -70,11 +70,8 @@ function blinkLED() {
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
-    // // if (IsSpeech) {
-    // // console.log('Say something!');
-    // // openMicAgain = false; // optie 1 spraak
-    // // }
-    let openMicAgain = false;
+    console.log('Say something!');
+    openMicAgain = false;
 
     //#region CONVERSATION */
     // setup the conversation
@@ -83,21 +80,23 @@ const startConversation = (conversation) => {
         // send the audio buffer to the speaker
         speakerHelper.update(data);
     })
-    //#region  SPEECH ONLY */
     .on('end-of-utterance', () => {
         // done speaking, close the mic
         record.stop();
     })
     .on('transcription', (data) => {
         // just to spit out to the console what was said (as we say it)
-        console.log('Transcription:', data.transcription, ' --- Done:', data.done);
+        console.log('Transcription:' + data.transcription + ' --- Done:' + data.done);
     })
-    //#endregion SPEECH ONLY */
     .on('response', (text) => {
         // what the assistant said back
-        if (text == "") {text = "Sorry, I didn't get that. Can you say it again?";}
-        console.log('Assistant Text Response:', text);
-        io.emit('message', text);
+        if (text != "") {
+            console.log('Assistant Text Response:', text);
+            io.emit('message', text);
+        }
+        else/*  if (text == "") */ {
+            text = "Sorry, I didn't get that. Can you say it again?";
+        }
     })
     .on('volume-percent', (percent) => {
         // if we've requested a volume level change, get the percentage of the new level
@@ -209,19 +208,10 @@ const startConversation = (conversation) => {
         if (error) {
             console.log('Conversation Ended Error:', error);
         }
-        else if (continueConversation) {
-            // // if (IsSpeech) {
-            // //     openMicAgain = true; // optie 1 spraak
-            // // } else {
-            // //     promptForInput(); // optie 2 tekst
-            // // }
+        else if (continueConversation && IsSpeech) {
             openMicAgain = true;
         } else {
             console.log('Conversation Complete');
-            // // if (!IsSpeech) {
-            // //     promptForInput();
-            // //     // conversation.end(); // optie 2 tekst
-            // // }
         }
     })
     .on('error', (error) =>  {
@@ -258,8 +248,8 @@ const startConversation = (conversation) => {
     })
     .on('close', () => {
         console.log('Assistant Finished Speaking');
-        if (/* IsSpeech && */ openMicAgain) {
-            assistant.start(config.conversation); // optie 1 spraak
+        if (IsSpeech && openMicAgain) {
+            assistant.start(config.conversation);
         }
     });
     //#endregion SPEAKER */
@@ -305,9 +295,15 @@ app.get('/', function (req, res, next) {
 app.use(express.static(path.join(__dirname, '/assets/')));
 
 io.on('connection', function (socket) {
-    console.log('socket.io connected');
+    console.log('client connected to socket');
     socket.on('textInput', function (data) {
         promptForInput(data);
     });
+    socket.on('IsSpeech', (checked) => {
+        IsSpeech = checked;
+        openMicAgain = true;
+        config.conversation.textQuery = undefined;
+        assistant.start(config.conversation);
+    })
 });
 //#endregion SERVER */
