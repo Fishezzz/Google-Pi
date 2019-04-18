@@ -65,18 +65,19 @@
         <script>
             var socket = io.connect();
             var msgText = "";
-            var isSpeech = document.getElementById("isSpeech");
+            var isSpeech = document.getElementById("isSpeech").checked;
             socket.on('message', function (msg) {
                 if (msgText != msg) {
                     $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor").append($('<div>').addClass("speech").text(msg)))).scrollTop($('.list-unstyled').height());
                     msgText = msg;
                 }
             });
-            function IsSpeech() {
-                socket.emit("IsSpeech", isSpeech.checked);
+            function IsSpeech(checked) {
+                isSpeech = checked;
+                socket.emit("IsSpeech", isSpeech);
             }
             function SendData() {
-                if (TextInput.value != "" && !isSpeech.checked) {
+                if (TextInput.value != "" && !isSpeech) {
                     socket.emit("textInput", TextInput.value);
                     $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value)))).scrollTop($('.list-unstyled').height());
                 }
