@@ -183,13 +183,13 @@ assistant
 
 app.get('/', function (req, res, next) {
     res.sendFile(__dirname + '/index.html');
-    console.log(__dirname);
 });
 
 app.use(express.static(path.join(__dirname, '/public/assets/')));
 
 io.on('connection', function (socket) {
     console.log('socket.io connected');
+    console.log(__dirname);
     socket.on('textInput', function (data) {
         promptForInput(data);
     });
