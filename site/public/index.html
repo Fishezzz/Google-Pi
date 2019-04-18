@@ -44,7 +44,7 @@
                                         class="form-control chat-input">
                                 </div>
                                 <div class="col-2">
-                                    <button class="btn btn-primary btn-block" onclick="SendData()">Send</button>
+                                    <button id="isSpeech" class="btn btn-primary btn-block" onclick="SendData()">Send</button>
                                 </div>
                                 <div class="col-1">
                                     <!-- Rounded switch -->
@@ -71,11 +71,11 @@
                     msgText = msg;
                 }
             });
-            function IsSpeech(checked) {
-                socket.emit("IsSpeech", checked);
+            function IsSpeech() {
+                socket.emit("IsSpeech", isSpeech.checked);
             }
             function SendData() {
-                if (TextInput.value != "" && !IsSpeech) {
+                if (TextInput.value != "" && !isSpeech.checked) {
                     socket.emit("textInput", TextInput.value);
                     $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value)))).scrollTop($('.list-unstyled').height());
                 }
