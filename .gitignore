@@ -134,5 +134,5 @@ env/lib/python3.5/site-packages/googlesamples/assistant/grpc/device_helpers.py
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/devicetool.py
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/pushtotalk_original.py
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/__pycache__/
-node_modules/
-site-assistant/tokens.json
+site/node_modules/
+site/tokens.json
