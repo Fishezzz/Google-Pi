@@ -75,7 +75,7 @@ const startConversation = (conversation) => {
     // // console.log('Say something!');
     // // openMicAgain = false; // optie 1 spraak
     // // }
-    var openMicAgain = false;
+    let openMicAgain = false;
 
     //#region CONVERSATION */
     // setup the conversation
@@ -287,12 +287,12 @@ assistant
     // // }
     assistant.start(config.conversation);
 })
-.on('started', () => {
-    // // if (IsSpeech) {
-    // //     startConversation();  // optie 1 spraak
-    // // }
-    startConversation();
-})
+.on('started', startConversation);
+// // .on('started', () => {
+// //     if (IsSpeech) {
+// //         startConversation();  // optie 1 spraak
+// //     }
+// // })
 .on('error', (error) => {
     console.log('Assistant Error:', error);
 })
