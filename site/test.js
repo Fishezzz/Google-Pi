@@ -1,7 +1,6 @@
 'use strict';
 
 //#region INIT & CONFIG */
-import express from 'express';
 var Gpio = require('onoff').Gpio;
 
 var LedR = new Gpio(13, 'out');
@@ -16,7 +15,7 @@ var Led6 = new Gpio(0, 'out');
 var blinkInterval;
 var blinkCount = 0;
 
-const app = express();
+const express = require('express');
 const PORT = 3000;
 
 const record = require('node-record-lpcm16');
