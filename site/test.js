@@ -3,20 +3,25 @@ var IsSpeech = false;
 var openMicAgain = false;
 var Gpio = require('onoff').Gpio;
 
-var LedR = new Gpio(13, 'out');
-var LedG = new Gpio(6, 'out');
-var LedB = new Gpio(5, 'out');
 var Led1 = new Gpio(26, 'out');
 var Led2 = new Gpio(19, 'out');
-// var Led3 = new Gpio(13, 'out');
-// var Led4 = new Gpio(6, 'out');
-// var Led5 = new Gpio(5, 'out');
+var Led3 = new Gpio(13, 'out');
+var Led4 = new Gpio(6, 'out');
+var Led5 = new Gpio(5, 'out');
 var Led6 = new Gpio(0, 'out');
 var blinkInterval;
 var blinkCount = 0;
 
 const express = require('express');
-const PORT = 3000;
+const app = express();
+const port = 3000;
+const { hostname } = require('os');
+var server = app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+var io = require('socket.io').listen(server, () => {
+    console.log('socket.io running on server');
+});
 
 const record = require('node-record-lpcm16');
 const Speaker = require('speaker');
@@ -114,16 +119,13 @@ const startConversation = (conversation) => {
                         Led2.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                     case 'LED 3':
-                        // Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedR.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                     case 'LED 4':
-                        // Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedG.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                     case 'LED 5':
-                        // Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedB.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                     case 'LED 6':
                         Led6.writeSync(params.status == 'ON' ? 1 : 0);
@@ -131,12 +133,9 @@ const startConversation = (conversation) => {
                     case 'ALL LEDS':
                         Led1.writeSync(params.status == 'ON' ? 1 : 0);
                         Led2.writeSync(params.status == 'ON' ? 1 : 0);
-                        // Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                        // Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                        // Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedR.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedG.writeSync(params.status == 'ON' ? 1 : 0);
-                        LedB.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
+                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
                         Led6.writeSync(params.status == 'ON' ? 1 : 0);
                     break;
                 }
@@ -148,39 +147,39 @@ const startConversation = (conversation) => {
                 if (params.device == 'RGB LED') {
                     switch (params.color) {
                         case 'blue':
-                            LedR.writeSync(0);
-                            LedG.writeSync(0);
-                            LedB.writeSync(1);
+                            Led3.writeSync(0);
+                            Led4.writeSync(0);
+                            Led5.writeSync(1);
                         break;
                         case 'red':
-                            LedR.writeSync(1);
-                            LedG.writeSync(0);
-                            LedB.writeSync(0);
+                            Led3.writeSync(1);
+                            Led4.writeSync(0);
+                            Led5.writeSync(0);
                         break;
                         case 'green':
-                            LedR.writeSync(0);
-                            LedG.writeSync(1);
-                            LedB.writeSync(0);
+                            Led3.writeSync(0);
+                            Led4.writeSync(1);
+                            Led5.writeSync(0);
                         break;
                         case 'yellow':
-                            LedR.writeSync(1);
-                            LedG.writeSync(1);
-                            LedB.writeSync(0);
+                            Led3.writeSync(1);
+                            Led4.writeSync(1);
+                            Led5.writeSync(0);
                         break;
                         case 'white':
-                            LedR.writeSync(1);
-                            LedG.writeSync(1);
-                            LedB.writeSync(1);
+                            Led3.writeSync(1);
+                            Led4.writeSync(1);
+                            Led5.writeSync(1);
                         break;
                         case 'black':
-                            LedR.writeSync(0);
-                            LedG.writeSync(0);
-                            LedB.writeSync(0);
+                            Led3.writeSync(0);
+                            Led4.writeSync(0);
+                            Led5.writeSync(0);
                         break;
                         default:
-                            LedR.writeSync(0);
-                            LedG.writeSync(0);
-                            LedB.writeSync(0);
+                            Led3.writeSync(0);
+                            Led4.writeSync(0);
+                            Led5.writeSync(0);
                         break;
                     }
                 }
@@ -300,3 +299,18 @@ assistant
     console.log('Assistant Error:', error);
 })
 //#endregion ASSISTANT */
+
+//#region SERVER */
+app.get('/', function (req, res, next) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+io.on('connection', function (socket) {
+    console.log('socket.io connected');
+    socket.on('textInput', function (data) {
+        promptForInput(data);
+    });
+});
+//#endregion SERVER */
