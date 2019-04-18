@@ -20,10 +20,10 @@ const readline = require('readline');
 
 const config = {
     auth: {
-        keyFilePath: path.resolve(__dirname, '/home/pi/Downloads/client_secret_77242431490-ioc2e07e06825hl7samhc1u27vpsitnf.apps.googleusercontent.com.json'),
+        keyFilePath: path.resolve(__dirname, '../client_secret.json'),
         // where you want the tokens to be saved
         // will create the directory if not already there
-        savedTokensPath: path.resolve(__dirname, '/home/pi/express/express-app/token.json'),
+        savedTokensPath: path.resolve(__dirname, './tokens.json'),
     },
     // this param is optional, but all options will be shown
     conversation: {
