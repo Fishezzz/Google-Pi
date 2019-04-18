@@ -6,7 +6,8 @@ var LedR = new Gpio(5, 'out');
 var LedG = new Gpio(6, 'out');
 var LedB = new Gpio(13, 'out');
 
-const app = require('express').express();
+const express = require('express');
+const app = express();
 const PORT = 3000;
 var server = app.listen(PORT);
 var io = require('socket.io').listen(server);
