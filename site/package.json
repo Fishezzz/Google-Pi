@@ -2,10 +2,10 @@
   "name": "assistant",
   "version": "1.0.0",
   "description": "A Google assistant on an axpress site",
-  "main": "index.js",
+  "main": "./public/index.js",
   "scripts": {
-    "test": "node ./test.js",
-    "start": "node ./index.js"
+    "test": "node ./public/test.js",
+    "start": "node ./public/index.js"
   },
   "author": "Fishezzz",
   "license": "MIT",
