@@ -47,98 +47,100 @@ const startConversation = (conversation) => {
     let openMicAgain = false;
 
     conversation
-    // send the audio buffer to the speaker
-    .on('audio-data', (data) => {
-        speakerHelper.update(data);
-    })
-    // done speaking, close the mic
-    .on('end-of-utterance', () => {
-        record.stop();
-    })
-    // just to spit out to the console what was said (as we say it)
-    .on('transcription', (data) => {
-        console.log('Transcription:', data.transcription, ' --- Done:', data.done);
-    })
-    // what the assistant said back
-    .on('response', (text) => {
-        console.log('Assistant Text Response:', text);
-        io.emit('message', text);
-    })
-    // if we've requested a volume level change, get the percentage of the new level
-    .on('volume-percent', (percent) => {
-        console.log('New Volume Percent:', percent);
-    })
-    // the device needs to complete an action
-    .on('device-action', (action) => {
-        console.log(action.inputs[0].payload.commands[0].execution[0].command);
-        console.log(action.inputs[0].payload.commands[0].execution[0].params);
-        if (action.inputs[0].payload.commands[0].execution[0].command == 'com.example.actions.LEDcolor') {
-            var params = action.inputs[0].payload.commands[0].execution[0].params;
-            if (params.device == 'RGB LED') {
-                switch (params.color) {
-                    case 'blue':
-                        LedR.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedG.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedB.writeSync(1); //set pin state to 1 (turn LED on)
-                    break;
-                    case 'red':
-                        LedR.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedG.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedB.writeSync(0); //set pin state to 0 (turn LED off)
-                    break;
-                    case 'green':
-                        LedR.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedG.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedB.writeSync(0); //set pin state to 0 (turn LED off)
-                    break;
-                    case 'yellow':
-                        LedR.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedG.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedB.writeSync(0); //set pin state to 0 (turn LED off)
-                    break;
-                    case 'white':
-                        LedR.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedG.writeSync(1); //set pin state to 1 (turn LED on)
-                        LedB.writeSync(1); //set pin state to 1 (turn LED on)
-                    break;
-                    default:
-                        LedR.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedG.writeSync(0); //set pin state to 0 (turn LED off)
-                        LedB.writeSync(0); //set pin state to 0 (turn LED off)
-                    break;
-                    // code block
-                }
+        // send the audio buffer to the speaker
+        .on('audio-data', (data) => {
+            speakerHelper.update(data);
+        })
+        // done speaking, close the mic
+        .on('end-of-utterance', () => {
+            record.stop();
+        })
+        // just to spit out to the console what was said (as we say it)
+        .on('transcription', (data) => {
+            console.log('Transcription:', data.transcription, ' --- Done:', data.done);
+        })
+        // what the assistant said back
+        .on('response', text => {
+            if (text != "") {
+                console.log('Assistant Text Response:', text);
+                io.emit('message', text);
             }
-            else console.log("fout device")
-        }
-    })
-    // once the conversation is ended, see if we need to follow up
-    .on('ended', (error, continueConversation) => {
-        if (error) {
-            console.log('Conversation Ended Error:', error);
-        }
-        else if (continueConversation) {
-            openMicAgain = true;
-            // startConversation;
-        } else {
-            console.log('Conversation Complete');
-            //startConversation;
-            //conversation.end();
-        }
-    })
-    // catch any errors
-    .on('error', (error) => {
-        console.log('Conversation Error:', error);
-    });
+        })
+        // if we've requested a volume level change, get the percentage of the new level
+        .on('volume-percent', (percent) => {
+            console.log('New Volume Percent:', percent);
+        })
+        // the device needs to complete an action
+        .on('device-action', (action) => {
+            console.log(action.inputs[0].payload.commands[0].execution[0].command);
+            console.log(action.inputs[0].payload.commands[0].execution[0].params);
+            if (action.inputs[0].payload.commands[0].execution[0].command == 'com.example.actions.LEDcolor') {
+                var params = action.inputs[0].payload.commands[0].execution[0].params;
+                if (params.device == 'RGB LED') {
+                    switch (params.color) {
+                        case 'blue':
+                            LedR.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedG.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedB.writeSync(1); //set pin state to 1 (turn LED on)
+                            break;
+                        case 'red':
+                            LedR.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedG.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedB.writeSync(0); //set pin state to 0 (turn LED off)
+                            break;
+                        case 'green':
+                            LedR.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedG.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedB.writeSync(0); //set pin state to 0 (turn LED off)
+                            break;
+                        case 'yellow':
+                            LedR.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedG.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedB.writeSync(0); //set pin state to 0 (turn LED off)
+                            break;
+                        case 'white':
+                            LedR.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedG.writeSync(1); //set pin state to 1 (turn LED on)
+                            LedB.writeSync(1); //set pin state to 1 (turn LED on)
+                            break;
+                        default:
+                            LedR.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedG.writeSync(0); //set pin state to 0 (turn LED off)
+                            LedB.writeSync(0); //set pin state to 0 (turn LED off)
+                            break;
+                        // code block
+                    }
+                }
+                else console.log("fout device")
+            }
+       })
+        // once the conversation is ended, see if we need to follow up
+        .on('ended', (error, continueConversation) => {
+            if (error) {
+                console.log('Conversation Ended Error:', error);
+            }
+            else if (continueConversation) {
+                openMicAgain = true;
+            } else {
+                console.log('Conversation Complete');
+            }
+        })
+        // catch any errors
+        .on('error', (error) => {
+            console.log(config.conversation.textQuery);
+            console.log('Conversation Error:', error);
+        });
 
     // pass the mic audio to the assistant
     const mic = record.start({
-        threshold: 0,
-        recordProgram: 'arecord',
+        threshold: 0.5,
+        silence: 1.0,
+        recordProgram: 'arecord', 
         device: 'plughw:1,0'
     });
     mic.on('data', (data) => {
         conversation.write(data);
+        //assistant.start(config.conversation);
     });
 
     // setup the speaker
@@ -148,32 +150,33 @@ const startConversation = (conversation) => {
     });
     speakerHelper.init(speaker);
     speaker
-    .on('open', () => {
-        console.log('Assistant Speaking');
-        speakerHelper.open();
-    })
-    .on('close', () => {
-        console.log('Assistant Finished Speaking');
-        if (openMicAgain) assistant.start(config.conversation, startConversation);
-    });
+        .on('open', () => {
+            console.log('Assistant Speaking');
+            speakerHelper.open();
+        })
+        .on('close', () => {
+            console.log('Assistant Finished Speaking');
+            if (openMicAgain) assistant.start(config.conversation);
+        });
 };
 
 const promptForInput = (pData) => {
     config.conversation.textQuery = pData;
     assistant.start(config.conversation);
+    config.conversation.textQuery = undefined;
 };
 
 
 // setup the assistant
 assistant
-.on('ready', () => {
-    // start a conversation!
-    //assistant.start(config.conversation);
-})
-//.on('started', startConversation)
-.on('error', (error) => {
-    console.log('Assistant Error:', error);
-});
+    .on('ready', () => {
+        // start a conversation!
+        assistant.start(config.conversation);
+    })
+    .on('started', startConversation)
+    .on('error', (error) => {
+        console.log('Assistant Error:', error);
+    });
 
 
 app.get('/', function (req, res, next) {
