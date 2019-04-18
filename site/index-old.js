@@ -1,4 +1,4 @@
-'use strict';
+'use strict';   
 var Gpio = require('onoff').Gpio;
 
 var LED = new Gpio(25, 'out');
@@ -6,7 +6,7 @@ var LedR = new Gpio(5, 'out');
 var LedG = new Gpio(6, 'out');
 var LedB = new Gpio(13, 'out');
 
-const app = require('express');
+const app = require('express').express();
 const PORT = 3000;
 var server = app.listen(PORT);
 var io = require('socket.io').listen(server);
