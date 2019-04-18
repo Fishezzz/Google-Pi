@@ -1,6 +1,6 @@
 //#region INIT & CONFIG */
-var IsSpeech = false;
-var openMicAgain = false;
+// // var IsSpeech = false;
+// // var openMicAgain = false;
 var Gpio = require('onoff').Gpio;
 
 var Led1 = new Gpio(26, 'out');
@@ -71,10 +71,11 @@ function blinkLED() {
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
-    if (IsSpeech) {
-        console.log('Say something!');
-        openMicAgain = false; // optie 1 spraak
-    }
+    // // if (IsSpeech) {
+    // // console.log('Say something!');
+    // // openMicAgain = false; // optie 1 spraak
+    // // }
+    var openMicAgain = false;
 
     //#region CONVERSATION */
     // setup the conversation
@@ -95,7 +96,9 @@ const startConversation = (conversation) => {
     //#endregion SPEECH ONLY */
     .on('response', (text) => {
         // what the assistant said back
+        if (text == "") text = "Sorry, I didn't get that. Can you say it again?";
         console.log('Assistant Text Response:', text);
+        io.emit('message', text);
     })
     .on('volume-percent', (percent) => {
         // if we've requested a volume level change, get the percentage of the new level
@@ -208,21 +211,23 @@ const startConversation = (conversation) => {
             console.log('Conversation Ended Error:', error);
         }
         else if (continueConversation) {
-            if (IsSpeech) {
-                openMicAgain = true; // optie 1 spraak
-            } else {
-                promptForInput(); // optie 2 tekst
-            }
+            // // if (IsSpeech) {
+            // //     openMicAgain = true; // optie 1 spraak
+            // // } else {
+            // //     promptForInput(); // optie 2 tekst
+            // // }
+            openMicAgain = true;
         } else {
             console.log('Conversation Complete');
-            if (!IsSpeech) {
-                promptForInput();
-                // conversation.end(); // optie 2 tekst
-            }
+            // // if (!IsSpeech) {
+            // //     promptForInput();
+            // //     // conversation.end(); // optie 2 tekst
+            // // }
         }
     })
     .on('error', (error) =>  {
         // catch any errors
+        console.log(config.conversation.textQuery);
         console.log('Conversation Error:', error);
     })
     //#endregion CONVERSATION */
@@ -230,7 +235,8 @@ const startConversation = (conversation) => {
     //#region  MIC */
     // pass the mic audio to the assistant
     const mic = record.start({
-        threshold: 0,
+        threshold: 0.5,
+        silence: 1.0,
         recordProgram: 'arecord',
         device: 'plughw:1,0'
     });
@@ -253,7 +259,7 @@ const startConversation = (conversation) => {
     })
     .on('close', () => {
         console.log('Assistant Finished Speaking');
-        if (IsSpeech && openMicAgain) {
+        if (/* IsSpeech && */ openMicAgain) {
             assistant.start(config.conversation); // optie 1 spraak
         }
     });
@@ -262,20 +268,10 @@ const startConversation = (conversation) => {
 //#endregion START CONVERSATION */
 
 //#region TEXT INPUT */
-const promptForInput = () => {
-    // type what you want to ask the assistant
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    rl.question('Type your request: ', (request) => {
-        // start the conversation
-        config.conversation.textQuery = request;
-        assistant.start(config.conversation, startConversation);
-
-        rl.close();
-    });
+const promptForInput = (request) => {
+    config.conversation.textQuery = request;
+    assistant.start(config.conversation);
+    config.conversation.textQuery = undefined;
 };
 //#endregion TEXT INPUT */
 
@@ -284,16 +280,18 @@ const promptForInput = () => {
 const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', () => {
-    if (IsSpeech) {
-        assistant.start(config.conversation); // optie 1 spraak
-    } else {
-        promptForInput(); // optie 2 tekst
-    }
+    // // if (IsSpeech) {
+    // //     assistant.start(config.conversation); // optie 1 spraak
+    // // } else {
+    // //     promptForInput(); // optie 2 tekst
+    // // }
+    assistant.start(config.conversation);
 })
 .on('started', () => {
-    if (IsSpeech) {
-        startConversation();  // optie 1 spraak
-    }
+    // // if (IsSpeech) {
+    // //     startConversation();  // optie 1 spraak
+    // // }
+    startConversation();
 })
 .on('error', (error) => {
     console.log('Assistant Error:', error);

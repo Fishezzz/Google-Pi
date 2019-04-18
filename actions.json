@@ -139,7 +139,7 @@
                         "items": [
                             {
                                 "simpleResponse": {
-                                    "textToSpeech": "Blinking ($speed)? $number times"
+                                    "textToSpeech": "Blinking $speed $number times"
                                 }
                             },
                             {

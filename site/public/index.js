@@ -8,7 +8,7 @@ var LedB = new Gpio(13, 'out');
 const express = require('express');
 const app = express();
 const port = 3000;
-const hostname = require('os');
+const { hostname } = require('os');
 var server = app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
