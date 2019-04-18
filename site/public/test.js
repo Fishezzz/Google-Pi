@@ -96,7 +96,7 @@ const startConversation = (conversation) => {
     //#endregion SPEECH ONLY */
     .on('response', (text) => {
         // what the assistant said back
-        if (text == "") text = "Sorry, I didn't get that. Can you say it again?";
+        if (text == "") {text = "Sorry, I didn't get that. Can you say it again?";}
         console.log('Assistant Text Response:', text);
         io.emit('message', text);
     })
