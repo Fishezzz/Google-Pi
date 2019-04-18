@@ -8,9 +8,13 @@ var LedB = new Gpio(13, 'out');
 
 const express = require('express');
 const app = express();
-const PORT = 3000;
-var server = app.listen(PORT);
-var io = require('socket.io').listen(server);
+const port = 3000;
+var server = app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+var io = require('socket.io').listen(server, () => {
+    console.log('socket.io running on server');
+});
 
 const record = require('node-record-lpcm16');
 const Speaker = require('speaker');
@@ -184,6 +188,7 @@ app.get('/', function (req, res, next) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', function (socket) {
+    console.log('socket.io connected');
     socket.on('textInput', function (data) {
         promptForInput(data);
     });
