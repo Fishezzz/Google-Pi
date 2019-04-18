@@ -65,6 +65,7 @@
         <script>
             var socket = io.connect();
             var msgText = "";
+            var isSpeech = document.getElementById("isSpeech");
             socket.on('message', function (msg) {
                 if (msgText != msg) {
                     $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor").append($('<div>').addClass("speech").text(msg)))).scrollTop($('.list-unstyled').height());
