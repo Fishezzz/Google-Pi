@@ -1,6 +1,7 @@
 'use strict';
-
 //#region INIT & CONFIG */
+var IsSpeech = false;
+var openMicAgain = false;
 var Gpio = require('onoff').Gpio;
 
 var LedR = new Gpio(13, 'out');
@@ -66,8 +67,10 @@ function blinkLED() {
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
-    // console.log('Say something!');
-    // let openMicAgain = false; // optie 1 spraak
+    if (IsSpeech) {
+        console.log('Say something!');
+        openMicAgain = false; // optie 1 spraak
+    }
 
     //#region CONVERSATION */
     // setup the conversation
@@ -207,12 +210,17 @@ const startConversation = (conversation) => {
             console.log('Conversation Ended Error:', error);
         }
         else if (continueConversation) {
-            // openMicAgain = true; // optie 1 spraak
-            promptForInput(); // optie 2 tekst
+            if (IsSpeech) {
+                openMicAgain = true; // optie 1 spraak
+            } else {
+                promptForInput(); // optie 2 tekst
+            }
         } else {
             console.log('Conversation Complete');
-            promptForInput();
-            // conversation.end(); // optie 2 tekst
+            if (!IsSpeech) {
+                promptForInput();
+                // conversation.end(); // optie 2 tekst
+            }
         }
     })
     .on('error', (error) =>  {
@@ -247,9 +255,9 @@ const startConversation = (conversation) => {
     })
     .on('close', () => {
         console.log('Assistant Finished Speaking');
-        // if (openMicAgain) {
-        //     assistant.start(config.conversation); // optie 1 spraak
-        // }
+        if (IsSpeech && openMicAgain) {
+            assistant.start(config.conversation); // optie 1 spraak
+        }
     });
     //#endregion SPEAKER */
 };
@@ -277,11 +285,18 @@ const promptForInput = () => {
 // setup the assistant
 const assistant = new GoogleAssistant(config.auth);
 assistant
-.on('ready', promptForInput) // optie 2 tekst
-// .on('ready', () => {
-//     assistant.start(config.conversation); // optie 1 spraak
-// })
-// .on('started', startConversation) // optie 1 spraak
+.on('ready', () => {
+    if (IsSpeech) {
+        assistant.start(config.conversation); // optie 1 spraak
+    } else {
+        promptForInput // optie 2 tekst
+    }
+})
+.on('started', () => {
+    if (IsSpeech) {
+        startConversation  // optie 1 spraak
+    }
+})
 .on('error', (error) => {
     console.log('Assistant Error:', error);
 })
