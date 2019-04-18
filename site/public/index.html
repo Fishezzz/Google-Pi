@@ -68,10 +68,11 @@
                 });
             // }
             function SendData() {
-                var textData = document.getElementById("TextInput");
-                socket.emit("textInput", TextInput.value);
-                $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value))));
-                document.getElementById("TextInput").value = "";
+                if (TextInput.value != "") {
+                    socket.emit("textInput", TextInput.value);
+                    $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value))));
+                }
+                TextInput.value = "";
             }
         </script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
