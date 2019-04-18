@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "description": "A Google assistant on an axpress site",
   "main": "index.js",
-  "directories": {
-    "example": "examples"
-  },
   "scripts": {
-    "test": "node test.js"
+    "test": "node ./test.js",
+    "start": "node ./index.js"
   },
   "author": "Fishezzz",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "google-assistant": "^0.5.3",
