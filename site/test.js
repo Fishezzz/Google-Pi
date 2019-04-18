@@ -1,11 +1,12 @@
 'use strict';
 
 //#region INIT & CONFIG */
-var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-// var LED = new Gpio(25, 'out'); //use GPIO pin 4, and specify that it is output
-var LedR = new Gpio(13, 'out'); //use GPIO pin 4, and specify that it is output
-var LedG = new Gpio(6, 'out'); //use GPIO pin 4, and specify that it is output
-var LedB = new Gpio(5, 'out'); //use GPIO pin 4, and specify that it is output
+import express from 'express';
+var Gpio = require('onoff').Gpio;
+
+var LedR = new Gpio(13, 'out');
+var LedG = new Gpio(6, 'out');
+var LedB = new Gpio(5, 'out');
 var Led1 = new Gpio(26, 'out');
 var Led2 = new Gpio(19, 'out');
 // var Led3 = new Gpio(13, 'out');
@@ -15,7 +16,7 @@ var Led6 = new Gpio(0, 'out');
 var blinkInterval;
 var blinkCount = 0;
 
-const express = require('express');
+const app = express();
 const PORT = 3000;
 
 const record = require('node-record-lpcm16');
@@ -77,15 +78,15 @@ const startConversation = (conversation) => {
         speakerHelper.update(data);
     })
     //#region  SPEECH ONLY */
-    // .on('end-of-utterance', () => {
-    //     // done speaking, close the mic
-    //     record.stop();
-    // })
-    // .on('transcription', (data) => {
-    //     // just to spit out to the console what was said (as we say it)
-    //     console.log('Transcription:', data.transcription, ' --- Done:', data.done);
-    // })
-    // //#endregion SPEECH ONLY */
+    .on('end-of-utterance', () => {
+        // done speaking, close the mic
+        record.stop();
+    })
+    .on('transcription', (data) => {
+        // just to spit out to the console what was said (as we say it)
+        console.log('Transcription:', data.transcription, ' --- Done:', data.done);
+    })
+    //#endregion SPEECH ONLY */
     .on('response', (text) => {
         // what the assistant said back
         console.log('Assistant Text Response:', text);
