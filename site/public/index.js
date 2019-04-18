@@ -25,10 +25,10 @@ const readline = require('readline');
 
 const config = {
     auth: {
-        keyFilePath: path.resolve(__dirname, '../client_secret.json'),
+        keyFilePath: path.resolve(__dirname, '../../client_secret.json'),
         // where you want the tokens to be saved
         // will create the directory if not already there
-        savedTokensPath: path.resolve(__dirname, './tokens.json'),
+        savedTokensPath: path.resolve(__dirname, '../tokens.json'),
     },
     // this param is optional, but all options will be shown
     conversation: {
@@ -185,10 +185,10 @@ assistant
 
 
 app.get('/', function (req, res, next) {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-app.use(express.static(path.join(__dirname, 'CSS')));
+app.use(express.static(path.join(__dirname, '/public/assets/')));
 
 io.on('connection', function (socket) {
     console.log('socket.io connected');
