@@ -45,7 +45,7 @@
           
       
       
-      <script src="http://fishezzz:3000/socket.io/socket.io.js"></script>
+      <script src="http://pimic:3000/socket.io/socket.io.js"></script>
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <script>
         var myVar = setInterval(myTimer, 1000);
@@ -62,7 +62,7 @@
         }
         function SendData() {      
             var textData = document.getElementById("TextInput");
-            socket.emit("light", TextInput.value);        
+            socket.emit("textInput", TextInput.value);        
             $('.list-unstyled').append($('<li>').addClass("mar-btm").append($('<div>').addClass("media-body pad-hor speech-right").append($('<div>').addClass("speech").text(TextInput.value))));
         }
       

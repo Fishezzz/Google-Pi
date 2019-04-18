@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "test": "node ./site-assistant/test.js",
-      "start": "node ./site-assistant/index.js",
-      "stop": "^C"
+        "test": "node ./site-assistant/test.js",
+        "start": "node ./site-assistant/index.js",
+        "stop": "^C"
     },
     "author": "Fishezzz",
     "license": "MIT",
