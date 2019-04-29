@@ -40,8 +40,7 @@
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-8">
-                                    <input type="text" placeholder="Enter your text" id="TextInput"
-                                        class="form-control chat-input">
+                                    <input type="text" placeholder="Enter your text" id="TextInput" class="form-control chat-input" onkeypress="return KeyPressed(event)">
                                 </div>
                                 <div class="col-2">
                                     <button id="isSpeech" class="btn btn-primary btn-block" onclick="SendData()">Send</button>
@@ -79,11 +78,11 @@
                     TextInput.value = "";
                 }
             }
-            $("TextInput").keypress(function(event) {
+            function KeyPressed(e) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode == 13)
                     SendData();
-            });
+            };
         </script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </body>
