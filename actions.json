@@ -54,6 +54,53 @@
             }
         },
         {
+            "name": "com.example.actions.SayRepeat",
+            "availability": {
+                "deviceClasses": [
+                    {
+                        "assistantSdkDevice": {}
+                    }
+                ]
+            },
+            "intent": {
+                "name": "com.example.intents.SayRepeat",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "type": "SchemaOrg_Text"
+                    }
+                ],
+                "trigger": {
+                    "queryPatterns": [
+                        "Say $SchemaOrg_Text:text",
+                        "Repeat $SchemaOrg_Text:text",
+                        "Repeat me: $SchemaOrg_Text:text"
+                    ]
+                }
+            },
+            "fulfillment": {
+                "staticFulfillment": {
+                    "templatedResponse": {
+                        "items": [
+                            {
+                                "simpleResponse": {
+                                    "textToSpeech": "$text"
+                                }
+                            },
+                            {
+                                "deviceExecution": {
+                                    "command": "com.example.commands.SayRepeat",
+                                    "params": {
+                                        "text": "$text"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
             "name": "com.example.actions.MyDevices",
             "availability": {
                 "deviceClasses": [
