@@ -1,16 +1,21 @@
 //#region INIT & CONFIG */
 var Gpio = require('onoff').Gpio;
+const i2c = require('i2c-bus');
 
 var Led1 = new Gpio(26, 'out');
 var Led2 = new Gpio(19, 'out');
-var Led3 = new Gpio(13, 'out');
-var Led4 = new Gpio(6, 'out');
-var Led5 = new Gpio(5, 'out');
+var Led3 = new Gpio(13, 'out'); // LedB
+var Led4 = new Gpio(6, 'out');  // LedG
+var Led5 = new Gpio(5, 'out');  // LedR
 var Led6 = new Gpio(0, 'out');
-var blinkInterval;
-var blinkCount = 0;
-var openMicAgain = false;
+var blinkInterval1, blinkInterval2, blinkInterval3, blinkInterval4, blinkInterval5, blinkInterval6;
+var blinkCount1, blinkCount2, blinkCount3, blinkCount4, blinkCount5, blinkCount6 = 0;
+
+const TC74_ADDR = 0b1001000;
+var readTempSensor = false;
+var temperature;
 var IsSpeech;
+var request;
 
 const express = require('express');
 const app = express();
@@ -28,7 +33,6 @@ const Speaker = require('speaker');
 const path = require('path');
 const GoogleAssistant = require('google-assistant');
 const speakerHelper = require('./examples/speaker-helper');
-const readline = require('readline');
 
 const config = {
     auth: {
@@ -52,26 +56,223 @@ const config = {
 
 
 //#region FUNCTIONS */
-function blinkLED() {
+function blinkLED1() {
+    if (Led1.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led1.writeSync(1);
+        console.log('Turning on LED1...');
+    } else {
+        Led1.writeSync(0);
+        console.log('Turning off LED1...');
+    }
+    blinkCount1--;
+    if (blinkCount1 == 0) {
+        clearInterval(blinkInterval1);
+    }
+};
+function blinkLED2() {
     if (Led2.readSync() === 0) { //check the pin state, if the state is 0 (or off)
         Led2.writeSync(1);
-        console.log('Turning on...');
+        console.log('Turning on LED2...');
     } else {
         Led2.writeSync(0);
-        console.log('Turning off...');
+        console.log('Turning off LED2...');
     }
-    blinkCount--;
-    if (blinkCount==0) {
-        clearInterval(blinkInterval);
+    blinkCount2--;
+    if (blinkCount2==0) {
+        clearInterval(blinkInterval2);
+    }
+};
+function blinkLED3() {
+    if (Led3.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led3.writeSync(1);
+        console.log('Turning on LED3...');
+    } else {
+        Led3.writeSync(0);
+        console.log('Turning off LED3...');
+    }
+    blinkCount3--;
+    if (blinkCount3==0) {
+        clearInterval(blinkInterval3);
+    }
+};
+function blinkLED4() {
+    if (Led4.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led4.writeSync(1);
+        console.log('Turning on LED4...');
+    } else {
+        Led4.writeSync(0);
+        console.log('Turning off LED4...');
+    }
+    blinkCount4--;
+    if (blinkCount4==0) {
+        clearInterval(blinkInterval4);
+    }
+};
+function blinkLED5() {
+    if (Led5.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led5.writeSync(1);
+        console.log('Turning on LED5...');
+    } else {
+        Led5.writeSync(0);
+        console.log('Turning off LED5...');
+    }
+    blinkCount5--;
+    if (blinkCount5==0) {
+        clearInterval(blinkInterval5);
+    }
+};
+function blinkLED6() {
+    if (Led6.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+        Led6.writeSync(1);
+        console.log('Turning on LED6...');
+    } else {
+        Led6.writeSync(0);
+        console.log('Turning off LED6...');
+    }
+    blinkCount6--;
+    if (blinkCount6==0) {
+        clearInterval(blinkInterval6);
     }
 };
 //#endregion FUNCTIONS */
+
+//#region ACTIONS */
+const ComExampleCommandsMyDevices = (params) => {
+    console.log('reached actions.device.commands.OnOff');
+    switch (params.device) {
+        case 'LED 1':
+            Led1.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'LED 2':
+            Led2.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'LED 3':
+            Led3.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'LED 4':
+            Led4.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'LED 5':
+            Led5.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'LED 6':
+            Led6.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+        case 'ALL LEDS':
+            Led1.writeSync(params.status == 'ON' ? 1 : 0);
+            Led2.writeSync(params.status == 'ON' ? 1 : 0);
+            Led3.writeSync(params.status == 'ON' ? 1 : 0);
+            Led4.writeSync(params.status == 'ON' ? 1 : 0);
+            Led5.writeSync(params.status == 'ON' ? 1 : 0);
+            Led6.writeSync(params.status == 'ON' ? 1 : 0);
+        break;
+    }
+}
+const ComExampleCommandsTemperatureHome = (params) => {
+    console.log('reached com.example.commands.TemperatureHome');
+    if (params.device == 'TEMP SENSOR') {
+        readTempSensor = true;
+        const i2c1 = i2c.openSync(1);
+        temperature = i2c1.readByteSync(TC74_ADDR, 0) + '°C';
+        i2c1.closeSync();
+    }
+}
+const ComExampleCommandsBlinkLight = (params) => {
+    console.log('reached com.example.commands.BlinkLight');
+    var delay;
+    switch (params.device) {
+        case 'SLOWLY':
+            delay = 1000;
+        break;
+        case 'QUICKLY':
+            delay = 250;
+        break;
+        default:
+            delay = 500;
+        break;
+    }
+    switch (params.device) {
+        case 'LED 1':
+            blinkCount1 = params.number*2;
+            blinkInterval1 = setInterval(blinkLED1, delay);
+        break;
+        case 'LED 2':
+            blinkCount2 = params.number*2;
+            blinkInterval2 = setInterval(blinkLED2, delay);
+        break;
+        case 'LED 3':
+            blinkCount3 = params.number*2;
+            blinkInterval3 = setInterval(blinkLED3, delay);
+        break;
+        case 'LED 4':
+            blinkCount4 = params.number*2;
+            blinkInterval4 = setInterval(blinkLED4, delay);
+        break;
+        case 'LED 5':
+            blinkCount5 = params.number*2;
+            blinkInterval5 = setInterval(blinkLED5, delay);
+        break;
+        case 'LED 6':
+            blinkCount6 = params.number*2;
+            blinkInterval6 = setInterval(blinkLED6, delay);
+        break;
+        case 'ALL LEDS':
+        default:
+            blinkCount1 = blinkCount2 = blinkCount3 = blinkCount4 = blinkCount5 = blinkCount6 = params.number*2;
+            blinkInterval1 = setInterval(blinkLED1, delay);
+            blinkInterval2 = setInterval(blinkLED2, delay);
+            blinkInterval3 = setInterval(blinkLED3, delay);
+            blinkInterval4 = setInterval(blinkLED4, delay);
+            blinkInterval5 = setInterval(blinkLED5, delay);
+            blinkInterval6 = setInterval(blinkLED6, delay);
+        break;
+    }
+}
+const ComExampleCommandsLEDColor = (params) => {
+    console.log('reached com.example.commands.LEDColor');
+    if (params.device == 'RGB LED') {
+        switch (params.color) {
+            case 'blue':
+                Led5.writeSync(0);
+                Led4.writeSync(0);
+                Led3.writeSync(1);
+            break;
+            case 'red':
+                Led5.writeSync(1);
+                Led4.writeSync(0);
+                Led3.writeSync(0);
+            break;
+            case 'green':
+                Led5.writeSync(0);
+                Led4.writeSync(1);
+                Led3.writeSync(0);
+            break;
+            case 'yellow':
+                Led5.writeSync(1);
+                Led4.writeSync(1);
+                Led3.writeSync(0);
+            break;
+            case 'white':
+                Led5.writeSync(1);
+                Led4.writeSync(1);
+                Led3.writeSync(1);
+            break;
+            case 'black':
+            default:
+                Led5.writeSync(0);
+                Led4.writeSync(0);
+                Led3.writeSync(0);
+            break;
+        }
+    }
+    else console.log('Wrong device.');
+}
+//#endregion ACTIONS */
 
 //#region START CONVERSATION */
 // starts a new conversation with the assistant
 const startConversation = (conversation) => {
     console.log('Say something!');
-    openMicAgain = false;
 
     //#region CONVERSATION */
     // setup the conversation
@@ -87,15 +288,23 @@ const startConversation = (conversation) => {
     .on('transcription', (data) => {
         // just to spit out to the console what was said (as we say it)
         console.log('Transcription:' + data.transcription + ' --- Done:' + data.done);
+        if (data.done)
+            request = data.transcription;
     })
     .on('response', (text) => {
         // what the assistant said back
         if (text != "") {
-            console.log('Assistant Text Response:', text);
-            io.emit('message', text);
+            if (readTempSensor) {
+                console.log('Assistant Text Response:', text + temperature);
+                io.emit('message', {Request : request, Response : text + temperature});
+                readTempSensor = false;
+            } else {
+                console.log('Assistant Text Response:', text);
+                io.emit('message', {Request : request, Response : text});
+            }
         }
-        else/*  if (text == "") */ {
-            text = "Sorry, I didn't get that. Can you say it again?";
+        else {
+            io.emit('message', {Request : request, Response : "Sorry, I didn't get that. Can you say it again?"});
         }
     })
     .on('volume-percent', (percent) => {
@@ -109,98 +318,18 @@ const startConversation = (conversation) => {
         console.log(command);
         console.log(params);
         switch (command) {
-            //#region com.example.commands.MyDevices */
             case 'com.example.commands.MyDevices':
-                console.log('reached actions.device.commands.OnOff');
-                switch (params.device) {
-                    case 'LED 1':
-                        Led1.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 2':
-                        Led2.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 3':
-                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 4':
-                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 5':
-                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'LED 6':
-                        Led6.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                    case 'ALL LEDS':
-                        Led1.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led2.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led3.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led4.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led5.writeSync(params.status == 'ON' ? 1 : 0);
-                        Led6.writeSync(params.status == 'ON' ? 1 : 0);
-                    break;
-                }
+                ComExampleCommandsMyDevices(params);
             break;
-            //#endregion action.devices.commands.OnOff */
-            //#region com.example.commands.LEDColor */
-            case 'com.example.commands.LEDColor':
-                console.log('reached com.example.commands.LEDColor');
-                if (params.device == 'RGB LED') {
-                    switch (params.color) {
-                        case 'blue':
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(1);
-                        break;
-                        case 'red':
-                            Led3.writeSync(1);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
-                        break;
-                        case 'green':
-                            Led3.writeSync(0);
-                            Led4.writeSync(1);
-                            Led5.writeSync(0);
-                        break;
-                        case 'yellow':
-                            Led3.writeSync(1);
-                            Led4.writeSync(1);
-                            Led5.writeSync(0);
-                        break;
-                        case 'white':
-                            Led3.writeSync(1);
-                            Led4.writeSync(1);
-                            Led5.writeSync(1);
-                        break;
-                        case 'black':
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
-                        break;
-                        default:
-                            Led3.writeSync(0);
-                            Led4.writeSync(0);
-                            Led5.writeSync(0);
-                        break;
-                    }
-                }
-                else console.log('Wrong device.');
+            case 'com.example.commands.TemperatureHome':
+                ComExampleCommandsTemperatureHome(params);
             break;
-            //#endregion com.example.commands.LEDColor */
-            //#region com.example.commands.BlinkLight */
             case 'com.example.commands.BlinkLight':
-                console.log('reached com.example.commands.BlinkLight');
-                blinkCount = params.number*2;
-                if (params.speed == 'SLOWLY') {
-                    blinkInterval = setInterval(blinkLED, 1000);
-                }
-                else if (params.speed == 'QUICKLY') {
-                    blinkInterval = setInterval(blinkLED, 250);
-                } else {
-                    blinkInterval = setInterval(blinkLED, 500);
-                }
+                ComExampleCommandsBlinkLight(params);
             break;
-            //#endregion com.example.commands.BlinkLight */
+            case 'com.example.commands.LEDColor':
+                ComExampleCommandsLEDColor(params);
+            break;
         }
     })
     .on('ended', (error, continueConversation) => {
@@ -208,14 +337,14 @@ const startConversation = (conversation) => {
         if (error) {
             console.log('Conversation Ended Error:', error);
         }
-        else if (continueConversation && IsSpeech) {
-            openMicAgain = true;
+        else if (continueConversation) {
         } else {
             console.log('Conversation Complete');
         }
     })
     .on('error', (error) =>  {
         // catch any errors
+        record.stop();
         console.log(config.conversation.textQuery);
         console.log('Conversation Error:', error);
     })
@@ -223,15 +352,19 @@ const startConversation = (conversation) => {
 
     //#region  MIC */
     // pass the mic audio to the assistant
-    const mic = record.start({
-        threshold: 0.5,
-        silence: 1.0,
-        recordProgram: 'arecord',
-        device: 'plughw:1,0'
-    });
-    mic.on('data', (data) => {
-        conversation.write(data)
-    });
+    if (IsSpeech)
+    {        
+        const mic = record.start({
+            threshold: 0.5,
+            silence: 1.0,
+            verbose: true,
+            recordProgram: 'arecord',
+            device: 'plughw:1,0'
+        });
+        mic.on('data', (data) => {
+            conversation.write(data)
+        });
+    }    
     //#endregion MIC */
 
     //#region  SPEAKER */
@@ -248,17 +381,15 @@ const startConversation = (conversation) => {
     })
     .on('close', () => {
         console.log('Assistant Finished Speaking');
-        if (IsSpeech && openMicAgain) {
-            assistant.start(config.conversation);
-        }
     });
     //#endregion SPEAKER */
 };
 //#endregion START CONVERSATION */
 
 //#region TEXT INPUT */
-const promptForInput = (request) => {
-    config.conversation.textQuery = request;
+const promptForInput = (data) => {
+    IsSpeech = false;
+    config.conversation.textQuery = data;
     assistant.start(config.conversation);
     config.conversation.textQuery = undefined;
 };
@@ -269,19 +400,8 @@ const promptForInput = (request) => {
 const assistant = new GoogleAssistant(config.auth);
 assistant
 .on('ready', () => {
-    // // if (IsSpeech) {
-    // //     assistant.start(config.conversation); // optie 1 spraak
-    // // } else {
-    // //     promptForInput(); // optie 2 tekst
-    // // }
-    assistant.start(config.conversation);
 })
 .on('started', startConversation)
-// // .on('started', () => {
-// //     if (IsSpeech) {
-// //         startConversation();  // optie 1 spraak
-// //     }
-// // })
 .on('error', (error) => {
     console.log('Assistant Error:', error);
 })
@@ -297,12 +417,11 @@ app.use(express.static(path.join(__dirname, '/assets/')));
 io.on('connection', function (socket) {
     console.log('client connected to socket');
     socket.on('textInput', function (data) {
+        request = data;
         promptForInput(data);
     });
     socket.on('IsSpeech', (checked) => {
         IsSpeech = checked;
-        openMicAgain = true;
-        config.conversation.textQuery = undefined;
         assistant.start(config.conversation);
     })
 });
