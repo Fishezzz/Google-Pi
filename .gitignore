@@ -136,3 +136,4 @@ env/lib/python3.5/site-packages/googlesamples/assistant/grpc/pushtotalk_original
 env/lib/python3.5/site-packages/googlesamples/assistant/grpc/__pycache__/
 site/node_modules/
 site/tokens.json
+site/public/assets/MQTT/loginMQTT.json
