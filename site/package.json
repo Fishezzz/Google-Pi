@@ -4,7 +4,6 @@
   "description": "A Google assistant on an axpress site",
   "main": "./public/index.js",
   "scripts": {
-    "test": "node ./public/test.js",
     "start": "node ./public/index.js"
   },
   "author": "Fishezzz",
