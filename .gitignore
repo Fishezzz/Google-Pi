@@ -5,6 +5,7 @@ creds.data
 googlepi.code-workspace
 googlepi.jpg
 googlepiBanner.jpg
+googlepiFavicon.jpg
 googlepiLogo.jpg
 Schema Nucleo Extension Shield.pdf
 Voorstel - Google-Assistant.docx
@@ -137,3 +138,4 @@ env/lib/python3.5/site-packages/googlesamples/assistant/grpc/__pycache__/
 site/node_modules/
 site/tokens.json
 site/public/assets/MQTT/loginMQTT.json
+site/public/faviconDescription.json
