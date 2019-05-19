@@ -210,10 +210,9 @@ const ComExampleCommandsBlinkLight = (params) => {
         case 'QUICKLY':
             delay = 250;
         break;
+        case 'NORMALLY':
         default:
             delay = 500;
-        break;
-        default:
         break;
     }
 
